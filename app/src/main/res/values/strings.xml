@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FoodBuddy</string>
+
+    <string name="title_restaurant">식당</string>
+    <string name="title_chat">채팅</string>
+    <string name="title_community">커뮤니티</string>
+    <string name="title_profile">프로필</string>
+    <string name="FoodBuddy">FoodBuddy</string>
+</resources>

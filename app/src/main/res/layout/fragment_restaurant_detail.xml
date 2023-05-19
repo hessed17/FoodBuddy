@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/restaurantImageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/restaurantNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/restaurantImageView"
+        app:layout_constraintTop_toTopOf="@id/restaurantImageView"
+        app:layout_constraintVertical_bias="0.277"
+        tools:text="식당명" />
+
+    <TextView
+        android:id="@+id/restaurantReviewTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/restaurantImageView"
+        app:layout_constraintStart_toEndOf="@+id/restaurantImageView"
+        tools:text="리뷰 평점:" />
+
+    <TextView
+        android:id="@+id/restaurantReviewNumberTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/restaurantReviewTextView"
+        app:layout_constraintTop_toTopOf="@id/restaurantReviewTextView"
+        tools:text="4.0" />
+
+    <!--    &lt;!&ndash;ImageView에 onclick추가 &ndash;&gt;-->
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/restaurantLocationCheckButton"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="30dp"
+        android:background="@color/food_buddy_main_color"
+        android:gravity="center"
+        android:text="위치보기"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/restaurantImageView"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/restaurantBookmarkButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/selector_favorite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/restaurantNameTextView" />
+
+    <ImageButton
+        android:id="@+id/restaurantSharingButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="12dp"
+        android:background="@color/white"
+        android:src="@drawable/sharing"
+        app:layout_constraintEnd_toStartOf="@id/restaurantBookmarkButton"
+        app:layout_constraintTop_toTopOf="@id/restaurantNameTextView" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/restaurantTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurantImageView">
+
+    </com.google.android.material.tabs.TabLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

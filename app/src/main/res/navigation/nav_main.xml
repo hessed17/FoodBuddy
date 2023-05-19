@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/restaurant_dest">
+
+    <fragment
+        android:id="@+id/restaurant_dest"
+        android:name="com.ajou.foodbuddy.ui.restaurant.main.RestaurantMainFragment"
+        android:label="Restaurant"
+        tools:layout="@layout/fragment_restaurant">
+
+        <action
+            android:id="@+id/action_restaurant_main_to_detail"
+            app:destination="@id/restaurant_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/restaurant_detail"
+        android:name="com.ajou.foodbuddy.ui.restaurant.detail.RestaurantDetailFragment"
+        android:label="Chat"
+        tools:layout="@layout/fragment_restaurant_detail">
+
+        <action
+            android:id="@+id/action_restaurant_detail_to_review_detail"
+            app:destination="@id/community_review_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/chat_dest"
+        android:name="com.ajou.foodbuddy.ui.chat.list.ChatListFragment"
+        android:label="Chat"
+        tools:layout="@layout/fragment_chat_list">
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/community_dest"
+        android:name="com.ajou.foodbuddy.ui.community.main.CommunityMainFragment"
+        android:label="Community"
+        tools:layout="@layout/fragment_community">
+
+        <action
+            android:id="@+id/action_community_main_to_register_new_review"
+            app:destination="@id/community_register_new_review"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/community_register_new_review"
+        android:name="com.ajou.foodbuddy.ui.community.register.CommunityRegisterNewReviewFragment"
+        android:label="Register"
+        tools:layout="@layout/fragment_community_register_new_review">
+
+        <action
+            android:id="@+id/action_register_to_main_for_complete"
+            app:destination="@id/community_dest"
+            app:popUpTo="@id/community_dest"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/community_notification"
+        android:name="com.ajou.foodbuddy.ui.community.notification.CommunityNotificationFragment"
+        android:label="Notification"
+        tools:layout="@layout/fragment_community_notification">
+
+        <action
+            android:id="@+id/action_community_main_to_notification"
+            app:destination="@id/community_review_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/community_review_detail"
+        android:name="com.ajou.foodbuddy.ui.community.detail.CommunityReviewDetailFragment"
+        android:label="Review"
+        tools:layout="@layout/fragment_community_review_detail">
+
+        <action
+            android:id="@+id/action_notification_to_review_detail"
+            app:destination="@id/restaurant_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/profile_dest"
+        android:name="com.ajou.foodbuddy.ui.profile.main.ProfileMailFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile">
+
+        <action
+            android:id="@+id/action_profile_main_to_search_user"
+            app:destination="@id/profile_search"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/action_profile_main_to_restaurant_detail"
+            app:destination="@id/restaurant_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/profile_dest"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/profile_search"
+        android:name="com.ajou.foodbuddy.ui.profile.search.SearchUserFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search_user">
+
+        <action
+            android:id="@+id/action_search_user_to_profile"
+            app:destination="@id/profile_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+
+    </fragment>
+</navigation>
