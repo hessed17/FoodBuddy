@@ -12,7 +12,7 @@ abstract class BaseFragment<VB: ViewBinding>: Fragment() {
 
     abstract val viewModel: ViewModel
 
-    private var _binding: VB? = null
+    internal var _binding: VB? = null
     private val binding get() = _binding!!
 
     abstract fun getViewBinding(): VB

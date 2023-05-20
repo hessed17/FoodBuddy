@@ -9,7 +9,7 @@
         android:id="@+id/restaurant_dest"
         android:name="com.ajou.foodbuddy.ui.restaurant.main.RestaurantMainFragment"
         android:label="Restaurant"
-        tools:layout="@layout/fragment_restaurant">
+        tools:layout="@layout/fragment_restaurant_main">
 
         <action
             android:id="@+id/action_restaurant_main_to_detail"
@@ -25,7 +25,7 @@
         android:id="@+id/restaurant_detail"
         android:name="com.ajou.foodbuddy.ui.restaurant.detail.RestaurantDetailFragment"
         android:label="Chat"
-        tools:layout="@layout/fragment_restaurant_detail">
+        tools:layout="@layout/activity_restaurant_detail">
 
         <action
             android:id="@+id/action_restaurant_detail_to_review_detail"
@@ -41,7 +41,7 @@
         android:id="@+id/chat_dest"
         android:name="com.ajou.foodbuddy.ui.chat.list.ChatListFragment"
         android:label="Chat"
-        tools:layout="@layout/fragment_chat_list">
+        tools:layout="@layout/fragment_chat_main">
 
 
     </fragment>
@@ -50,7 +50,7 @@
         android:id="@+id/community_dest"
         android:name="com.ajou.foodbuddy.ui.community.main.CommunityMainFragment"
         android:label="Community"
-        tools:layout="@layout/fragment_community">
+        tools:layout="@layout/fragment_community_main">
 
         <action
             android:id="@+id/action_community_main_to_register_new_review"
@@ -112,7 +112,7 @@
         android:id="@+id/profile_dest"
         android:name="com.ajou.foodbuddy.ui.profile.main.ProfileMailFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile">
+        tools:layout="@layout/fragment_profile_main">
 
         <action
             android:id="@+id/action_profile_main_to_search_user"

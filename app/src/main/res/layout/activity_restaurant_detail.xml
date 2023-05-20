@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent">
 
     <ImageView
@@ -21,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
+        android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/restaurantImageView"
@@ -34,6 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:textStyle="bold"
+        android:textColor="@color/black"
+
         app:layout_constraintBottom_toBottomOf="@id/restaurantImageView"
         app:layout_constraintStart_toEndOf="@+id/restaurantImageView"
         tools:text="리뷰 평점:" />
@@ -43,6 +47,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
+        android:textColor="@color/black"
+
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/restaurantReviewTextView"
         app:layout_constraintTop_toTopOf="@id/restaurantReviewTextView"
@@ -60,6 +66,7 @@
         android:gravity="center"
         android:text="위치보기"
         android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@id/restaurantImageView"
         app:layout_constraintEnd_toEndOf="parent" />
 

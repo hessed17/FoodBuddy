@@ -20,6 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.login.LoginActivity"/>
+        <activity android:name=".ui.login.RegisterAccountActivity"/>
+        <activity android:name=".ui.restaurant.detail.RestaurantDetailActivity"/>
     </application>
 
 </manifest>

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/foodBuddyTextView"
@@ -28,6 +29,8 @@
         android:ems="10"
         android:hint="ID"
         android:inputType="textEmailAddress"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,6 +46,8 @@
         android:ems="10"
         android:hint="password"
         android:inputType="textPassword"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
@@ -55,14 +60,12 @@
         android:layout_height="20dp"
         android:textColor="#F44336"
         android:textSize="12sp"
-        android:textStyle="bold"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.585"
-        tools:text=" 사용자 아이디와 비밀번호가 일치하지 않습니다." />
+        app:layout_constraintTop_toBottomOf="@id/loginPasswordEditTextView"
+        android:text=" 사용자 아이디와 비밀번호가 일치하지 않습니다." />
 
     <Button
         android:id="@+id/loginButton"
@@ -73,11 +76,10 @@
         android:text="로그인"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginPasswordEditTextView"
-        app:layout_constraintVertical_bias="0.65" />
+        app:layout_constraintTop_toBottomOf="@id/loginPasswordEditTextView" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/userJoinText"
+        android:id="@+id/userJoinButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
