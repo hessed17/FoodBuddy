@@ -10,8 +10,6 @@ import androidx.viewbinding.ViewBinding
 
 abstract class BaseFragment<VB: ViewBinding>: Fragment() {
 
-    abstract val viewModel: ViewModel
-
     internal var _binding: VB? = null
     private val binding get() = _binding!!
 

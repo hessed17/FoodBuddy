@@ -9,8 +9,6 @@ import com.ajou.foodbuddy.ui.community.CommunityViewModel
 
 class CommunityReviewDetailFragment : BaseFragment<FragmentCommunityReviewDetailBinding>() {
 
-    override val viewModel: CommunityViewModel by activityViewModels()
-
     override fun getViewBinding(): FragmentCommunityReviewDetailBinding =
         FragmentCommunityReviewDetailBinding.inflate(layoutInflater)
 

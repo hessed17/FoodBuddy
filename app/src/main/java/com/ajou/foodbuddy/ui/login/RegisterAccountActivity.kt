@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ajou.foodbuddy.data.firebase.model.UserInfo
 import com.ajou.foodbuddy.data.firebase.path.Key
 import com.ajou.foodbuddy.databinding.ActivityRegisterAccountBinding
-import com.ajou.foodbuddy.extensions.convertStrToUtf8
+import com.ajou.foodbuddy.extensions.convertStrToBase64
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -96,7 +96,7 @@ class RegisterAccountActivity : AppCompatActivity() {
     }
 
     private fun insertAddressToRTDB(userId: String, userInfo: UserInfo) {
-        database.child(Key.USER_INFO).child(userId.convertStrToUtf8()).setValue(userInfo)
+        database.child(Key.USER_INFO).child(userId.convertStrToBase64()).setValue(userInfo)
         finish()
     }
 }

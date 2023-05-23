@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/reviewContraintLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="12dp"
@@ -31,7 +32,7 @@
         tools:text="리뷰제목" />
 
     <TextView
-        android:id="@+id/reviewWriterText"
+        android:id="@+id/reviewContentText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#000000"
@@ -79,8 +80,8 @@
         android:textColor="@color/black"
         android:textSize="13sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@id/likeNumberTextview"
         app:layout_constraintBottom_toBottomOf="@id/profileImageView"
+        app:layout_constraintEnd_toEndOf="@id/likeNumberTextview"
         tools:text="3.0" />
 
     <RatingBar
@@ -91,8 +92,8 @@
         android:layout_marginEnd="8dp"
         android:numStars="5"
         android:rating="3"
-        app:layout_constraintEnd_toStartOf="@+id/reviewNumberText"
-        app:layout_constraintBottom_toBottomOf="@id/profileImageView" />
+        app:layout_constraintBottom_toBottomOf="@id/profileImageView"
+        app:layout_constraintEnd_toStartOf="@+id/reviewNumberText" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

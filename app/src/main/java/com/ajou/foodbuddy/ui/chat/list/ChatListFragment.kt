@@ -9,8 +9,6 @@ import com.ajou.foodbuddy.ui.chat.ChatViewModel
 
 class ChatListFragment: BaseFragment<FragmentChatMainBinding>() {
 
-    override val viewModel: ChatViewModel by activityViewModels()
-
     override fun getViewBinding(): FragmentChatMainBinding = FragmentChatMainBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

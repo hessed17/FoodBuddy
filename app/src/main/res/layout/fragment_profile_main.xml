@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="#FFD7D7"
+    android:background="@color/white"
     android:padding="16dp">
 
     <ImageView
@@ -96,6 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:text="선호 식당 목록"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/likedRestaurantImageView"

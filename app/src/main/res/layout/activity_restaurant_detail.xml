@@ -3,16 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/restaurantImageView"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,37 +21,37 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
+        android:text="식당명"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/restaurantImageView"
         app:layout_constraintTop_toTopOf="@id/restaurantImageView"
-        app:layout_constraintVertical_bias="0.277"
-        tools:text="식당명" />
+        app:layout_constraintVertical_bias="0.277" />
 
     <TextView
         android:id="@+id/restaurantReviewTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:textStyle="bold"
+        android:text="리뷰 평점:"
         android:textColor="@color/black"
 
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/restaurantImageView"
-        app:layout_constraintStart_toEndOf="@+id/restaurantImageView"
-        tools:text="리뷰 평점:" />
+        app:layout_constraintStart_toEndOf="@+id/restaurantImageView" />
 
     <TextView
         android:id="@+id/restaurantReviewNumberTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:textColor="@color/black"
 
+
+        android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/restaurantReviewTextView"
-        app:layout_constraintTop_toTopOf="@id/restaurantReviewTextView"
-        tools:text="4.0" />
+        app:layout_constraintTop_toTopOf="@id/restaurantReviewTextView" />
 
     <!--    &lt;!&ndash;ImageView에 onclick추가 &ndash;&gt;-->
 
@@ -65,8 +64,8 @@
         android:background="@color/food_buddy_main_color"
         android:gravity="center"
         android:text="위치보기"
-        android:textStyle="bold"
         android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/restaurantImageView"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -89,15 +88,75 @@
         app:layout_constraintEnd_toStartOf="@id/restaurantBookmarkButton"
         app:layout_constraintTop_toTopOf="@id/restaurantNameTextView" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/restaurantTabLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/restaurantConLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/restaurantImageView">
 
-    </com.google.android.material.tabs.TabLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/reviewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
+            android:background="#00ff0000"
+            android:text="리뷰 목록"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/menuButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="70dp"
+            android:background="#00ff0000"
+            android:text="메뉴목록"
+            android:textColor="@color/gray"
+            android:textSize="18sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Spinner
+        android:id="@+id/categoriesSpinner"
+        android:layout_width="95dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/drawable_menu_shape"
+        android:paddingLeft="10dp"
+        android:outlineSpotShadowColor="@color/black"
+        android:popupBackground="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurantConLayout" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reviewListRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/categoriesSpinner"
+        tools:listitem="@layout/item_review" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/menuListRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/categoriesSpinner"
+        app:spanCount="2"
+        tools:listitem="@layout/item_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

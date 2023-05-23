@@ -1,16 +1,15 @@
 package com.ajou.foodbuddy.extensions
 
-import java.net.URLDecoder
-import java.net.URLEncoder
+import android.util.Base64
 import java.text.SimpleDateFormat
-import java.util.*
 
-fun String.convertUtf8ToStr(): String {
-    return URLDecoder.decode(this, "UTF-8")
+fun String.convertBase64ToStr(): String {
+    val decodedEmailBytes = Base64.decode(this, Base64.DEFAULT)
+    return String(decodedEmailBytes)
 }
 
-fun String.convertStrToUtf8(): String {
-    return URLEncoder.encode(this, "UTF-8")
+fun String.convertStrToBase64(): String {
+    return Base64.encodeToString(this.toByteArray(), Base64.DEFAULT)
 }
 
 fun String.convertDateFullToTimestamp(): String {

@@ -68,6 +68,16 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
 
 //    implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-database-ktx:20.0.4'
+//    implementation 'com.google.firebase:firebase-database-ktx:20.0.4'
+    implementation 'com.google.firebase:firebase-database-ktx'
+
+    // storage
+    implementation 'com.google.firebase:firebase-storage-ktx'
 //    implementation 'com.google.firebase:firebase-storage-ktx:20.2.0'
+
+    // coroutine service
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4'
+
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
 }

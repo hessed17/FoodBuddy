@@ -8,8 +8,6 @@ import com.ajou.foodbuddy.databinding.FragmentSearchUserBinding
 import com.ajou.foodbuddy.ui.profile.ProfileViewModel
 
 class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>() {
-    override val viewModel: ProfileViewModel by activityViewModels()
-
     override fun getViewBinding(): FragmentSearchUserBinding =
         FragmentSearchUserBinding.inflate(layoutInflater)
 

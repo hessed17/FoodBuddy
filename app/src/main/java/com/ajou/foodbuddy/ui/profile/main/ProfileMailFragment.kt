@@ -9,8 +9,6 @@ import com.ajou.foodbuddy.ui.profile.ProfileViewModel
 
 class ProfileMailFragment: BaseFragment<FragmentProfileMainBinding>() {
 
-    override val viewModel: ProfileViewModel by activityViewModels()
-
     override fun getViewBinding(): FragmentProfileMainBinding =
         FragmentProfileMainBinding.inflate(layoutInflater)
 

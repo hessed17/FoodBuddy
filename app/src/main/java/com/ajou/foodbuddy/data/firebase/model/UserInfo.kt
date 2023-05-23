@@ -1,7 +1,22 @@
 package com.ajou.foodbuddy.data.firebase.model
 
-data class UserInfo(
-    val nickname: String? = null,
-    val profileImageFileName: String? = null,
-    val friendCount: Int = 0
+import android.net.Uri
+
+//data class UserProfileInfo(
+//    val nickname: String? = null,
+//    val friendCount: Int = 0,
+//    val friendList: String,
+//    val favoriteRestaurant
+//)
+//
+//data class ProcessedUserProfileInfo(
+//    val profileImageFileName: String? = null,
+//    val nickname: String,
+//    val friendCount: Int,
+//    val friendList: List<String>,
+//)
+
+data class OtherUserInfo(
+    val profileImage: Uri? = null,
+    val nickname: String? = null
 )
