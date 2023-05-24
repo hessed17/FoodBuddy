@@ -69,11 +69,12 @@
         app:layout_constraintVertical_bias="0.08" />
 
     <TextView
-        android:id="@+id/friendNameTextView"
+        android:id="@+id/profileNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="윤여송"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@id/profileImageButton"
@@ -88,7 +89,7 @@
         android:background="@color/white"
         android:src="@drawable/vector"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/friendNameTextView" />
+        app:layout_constraintTop_toBottomOf="@id/profileNameTextView" />
     <!--recycler view 로 바꾸기 -->
     <TextView
         android:id="@+id/likedRestaurantListText"

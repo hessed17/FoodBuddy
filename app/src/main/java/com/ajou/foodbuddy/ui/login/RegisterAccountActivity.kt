@@ -3,6 +3,7 @@ package com.ajou.foodbuddy.ui.login
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.ajou.foodbuddy.data.firebase.model.UserInfo
 import com.ajou.foodbuddy.data.firebase.path.Key
@@ -12,8 +13,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegisterAccountActivity : AppCompatActivity() {
+
+    private val viewModel: LoginViewModel by viewModels()
 
     private lateinit var binding: ActivityRegisterAccountBinding
 
@@ -83,6 +88,7 @@ class RegisterAccountActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                             insertAddressToRTDB(userId, userInfo)
+                            saveUserIdToLocal(userId)
                         } else {
                             Toast.makeText(
                                 baseContext,
@@ -98,5 +104,9 @@ class RegisterAccountActivity : AppCompatActivity() {
     private fun insertAddressToRTDB(userId: String, userInfo: UserInfo) {
         database.child(Key.USER_INFO).child(userId.convertStrToBase64()).setValue(userInfo)
         finish()
+    }
+
+    private fun saveUserIdToLocal(userId: String) {
+        viewModel.putUserId(userId)
     }
 }

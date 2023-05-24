@@ -6,4 +6,7 @@
     <string name="title_community">커뮤니티</string>
     <string name="title_profile">프로필</string>
     <string name="FoodBuddy">FoodBuddy</string>
+
+    <string name="shared_preferences">shared_preferences</string>
+    <string name="preference_user_id">preference_user_id</string>
 </resources>

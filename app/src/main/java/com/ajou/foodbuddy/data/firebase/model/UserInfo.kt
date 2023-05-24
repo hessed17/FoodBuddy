@@ -16,7 +16,7 @@ import android.net.Uri
 //    val friendList: List<String>,
 //)
 
-data class OtherUserInfo(
-    val profileImage: Uri? = null,
+data class UserInfo(
+//    val profileImage: Uri? = null,
     val nickname: String? = null
 )
