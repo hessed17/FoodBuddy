@@ -41,6 +41,8 @@ class RestaurantMainFragment : BaseFragment<FragmentRestaurantMainBinding>(),
         initSpinner()
         initAdapter()
         bindRestaurantInfo()
+
+        Log.d("onViewCreated", "onViewCreated")
     }
 
     private fun initCategoryButton() {
@@ -108,10 +110,11 @@ class RestaurantMainFragment : BaseFragment<FragmentRestaurantMainBinding>(),
     }
 
     private fun bindRestaurantInfo(categoryNumber: String? = null) {
+        val restaurantDB = database.child(RESTAURANT_INFO).limitToFirst(10)
         if (categoryNumber.isNullOrBlank()) {
-            database.child(RESTAURANT_INFO).addValueEventListener(valueEventListener)
+            restaurantDB.addValueEventListener(valueEventListener)
         } else {
-            database.child(RESTAURANT_INFO).orderByChild("categoryId").equalTo(categoryNumber).addValueEventListener(valueEventListener)
+            restaurantDB.orderByChild("categoryId").equalTo(categoryNumber).addValueEventListener(valueEventListener)
         }
     }
 

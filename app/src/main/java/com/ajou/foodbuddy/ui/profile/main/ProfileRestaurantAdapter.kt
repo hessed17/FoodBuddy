@@ -21,9 +21,13 @@ class ProfileRestaurantAdapter(
 
         fun bind(resModel: MyRestaurant) {
             binding.restaurantNameTextView.text = resModel.restaurantName
-            Glide.with(binding.root.context).load(resModel.thumbnailImage).into(binding.restaurantImageView)
 
-            binding.MymenuContraintLayout.setOnClickListener {
+            Glide
+                .with(binding.root)
+                .load(resModel.thumbnailImage)
+                .into(binding.restaurantImageView)
+
+            binding.root.setOnClickListener {
                 restaurantClickListener(resModel)
                 //Send Intent Review Id?.. when clicked 해당 식당 intent보내서 처리하기
 //                val intent = Intent(binding.root.context, RestaurantDetailActivity::class.java)

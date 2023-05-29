@@ -1,8 +1,7 @@
 package com.ajou.foodbuddy.data.repository
 
-import com.ajou.foodbuddy.data.firebase.model.ChatItem
-import com.ajou.foodbuddy.data.firebase.model.ChatMessageItem
-import com.ajou.foodbuddy.data.firebase.model.ProcessedChatItem
+import com.ajou.foodbuddy.data.firebase.model.chat.ChatMessageItem
+import com.ajou.foodbuddy.data.firebase.model.chat.ProcessedChatItem
 import kotlinx.coroutines.flow.Flow
 
 interface ChatRepository {

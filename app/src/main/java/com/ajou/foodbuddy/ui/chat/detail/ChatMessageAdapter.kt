@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ajou.foodbuddy.data.firebase.model.ChatMessageItem
+import com.ajou.foodbuddy.data.firebase.model.chat.ChatMessageItem
 import com.ajou.foodbuddy.databinding.ItemChatroomDetailMyMessageBinding
 import com.ajou.foodbuddy.databinding.ItemChatroomDetailOpponentMessageBinding
 

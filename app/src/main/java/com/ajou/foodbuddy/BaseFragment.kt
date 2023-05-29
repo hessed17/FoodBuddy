@@ -1,6 +1,7 @@
 package com.ajou.foodbuddy
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ abstract class BaseFragment<VB: ViewBinding>: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("onCreateView", "onViewCreate")
         _binding = getViewBinding()
         return binding.root
     }

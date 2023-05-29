@@ -4,7 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="12dp"
     android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/toolbarLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/restaurantSharingButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="12dp"
+            android:background="@color/white"
+            android:src="@drawable/sharing"
+            app:layout_constraintEnd_toStartOf="@id/restaurantBookmarkButton"
+            app:layout_constraintTop_toTopOf="@id/restaurantBookmarkButton" />
+
+        <ImageButton
+            android:id="@+id/restaurantBookmarkButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/selector_favorite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/restaurantImageView"
@@ -13,7 +43,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbarLayout" />
 
     <TextView
         android:id="@+id/restaurantNameTextView"
@@ -68,25 +98,6 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/restaurantImageView"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageButton
-        android:id="@+id/restaurantBookmarkButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="30dp"
-        android:background="@drawable/selector_favorite"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/restaurantNameTextView" />
-
-    <ImageButton
-        android:id="@+id/restaurantSharingButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="12dp"
-        android:background="@color/white"
-        android:src="@drawable/sharing"
-        app:layout_constraintEnd_toStartOf="@id/restaurantBookmarkButton"
-        app:layout_constraintTop_toTopOf="@id/restaurantNameTextView" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/restaurantConLayout"

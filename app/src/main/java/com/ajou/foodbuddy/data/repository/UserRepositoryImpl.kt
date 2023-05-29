@@ -1,7 +1,7 @@
 package com.ajou.foodbuddy.data.repository
 
 import android.util.Log
-import com.ajou.foodbuddy.data.firebase.model.UserInfo
+import com.ajou.foodbuddy.data.firebase.model.ChatUserInfo
 import com.ajou.foodbuddy.data.firebase.path.Key.USER_FRIEND_INFO
 import com.ajou.foodbuddy.data.firebase.path.Key.USER_INFO
 import com.ajou.foodbuddy.extensions.convertBase64ToStr
@@ -20,9 +20,9 @@ class UserRepositoryImpl @Inject constructor(): UserRepository {
 
     private val database = Firebase.database.reference
 
-    private val _myFriendUserInfoList = MutableStateFlow<List<UserInfo>>(emptyList())
-    override val myFriendUserInfoList: Flow<List<UserInfo>>
-        get() = _myFriendUserInfoList.asStateFlow()
+    private val _myFriendChatUserInfoList = MutableStateFlow<List<ChatUserInfo>>(emptyList())
+    override val myFriendUserInfoList: Flow<List<ChatUserInfo>>
+        get() = _myFriendChatUserInfoList.asStateFlow()
 
     override suspend fun getMyFriendList(userId: String) {
         val myFriendUserIdList = mutableListOf<String>()
@@ -30,22 +30,24 @@ class UserRepositoryImpl @Inject constructor(): UserRepository {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (snapshot in dataSnapshot.children) {
                     val friendUserId = snapshot.value.toString().convertBase64ToStr()
+                    Log.d("friendUserId", friendUserId)
                     myFriendUserIdList.add(friendUserId)
                 }
 
-                myFriendUserIdList.map { getMyFriendUserInfo(it) }
+                myFriendUserIdList.map { getMyFriendChatUserInfo(it) }
             }
             override fun onCancelled(error: DatabaseError) {}
         })
     }
 
-    private fun getMyFriendUserInfo(userId: String) {
+    private fun getMyFriendChatUserInfo(userId: String) {
         database.child(USER_INFO).child(userId.convertStrToBase64()).addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val friendUserId = snapshot.key.toString().convertBase64ToStr()
                 val nickname = snapshot.child("nickname").value.toString()
-                val userInfo = UserInfo(friendUserId, nickname)
-                _myFriendUserInfoList.value = _myFriendUserInfoList.value + userInfo
+                val chatUserInfo = ChatUserInfo(friendUserId, nickname)
+                Log.d("nickname", nickname)
+                _myFriendChatUserInfoList.value = _myFriendChatUserInfoList.value + chatUserInfo
             }
             override fun onCancelled(error: DatabaseError) {}
         })

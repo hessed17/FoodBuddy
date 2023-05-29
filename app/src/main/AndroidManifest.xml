@@ -37,6 +37,9 @@
             android:value="@string/default_notification_channel_id" />
         <activity android:name=".ui.chat.detail.ChatDetailActivity"/>
         <activity android:name=".ui.chat.invite.ChatInviteActivity"/>
+        <activity android:name=".ui.profile.main.ProfileMainFriendActivity"/>
+        <activity android:name=".ui.profile.search.SearchAddFriendListActivity"/>
+        <activity android:name=".ui.profile.search.SearchDeleteFriendListActivity"/>
     </application>
 
 </manifest>

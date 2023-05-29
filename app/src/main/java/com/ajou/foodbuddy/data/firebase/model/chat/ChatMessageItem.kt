@@ -1,4 +1,4 @@
-package com.ajou.foodbuddy.data.firebase.model
+package com.ajou.foodbuddy.data.firebase.model.chat
 
 data class ChatMessageItem(
     val writerUserId: String? = null,

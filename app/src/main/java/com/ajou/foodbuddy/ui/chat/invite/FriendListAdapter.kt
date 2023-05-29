@@ -5,17 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ajou.foodbuddy.data.firebase.model.UserInfo
+import com.ajou.foodbuddy.data.firebase.model.ChatUserInfo
 import com.ajou.foodbuddy.databinding.ItemInviteUserBinding
 
-class FriendListAdapter(): ListAdapter<UserInfo, FriendListAdapter.ViewHolder>(diffUtil) {
+class FriendListAdapter(): ListAdapter<ChatUserInfo, FriendListAdapter.ViewHolder>(diffUtil) {
 
-    private val selectedFriends = mutableListOf<UserInfo>()
+    private val selectedFriends = mutableListOf<ChatUserInfo>()
 
     fun getSelectedFriendList() = selectedFriends.toList()
 
     inner class ViewHolder(private val binding: ItemInviteUserBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: UserInfo) {
+        fun bind(item: ChatUserInfo) {
             with(binding) {
                 nicknameTextView.text = item.nickname
 
@@ -40,12 +40,12 @@ class FriendListAdapter(): ListAdapter<UserInfo, FriendListAdapter.ViewHolder>(d
     }
 
     companion object {
-        val diffUtil = object: DiffUtil.ItemCallback<UserInfo>() {
-            override fun areItemsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
+        val diffUtil = object: DiffUtil.ItemCallback<ChatUserInfo>() {
+            override fun areItemsTheSame(oldItem: ChatUserInfo, newItem: ChatUserInfo): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
+            override fun areContentsTheSame(oldItem: ChatUserInfo, newItem: ChatUserInfo): Boolean {
                 return oldItem.userId == newItem.userId
             }
 

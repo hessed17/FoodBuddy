@@ -3,7 +3,9 @@ package com.ajou.foodbuddy.data.firebase.path
 object Key {
 
     const val USER_INFO = "UserInfo"
-    const val USER_FRIEND_INFO = "UserFriendsInfo"
+    const val USER_FRIEND_INFO = "userFriendsInfo"
+    const val NICKNAME = "nickname"
+    const val FRIEND_COUNT = "friendCount"
 
     // Restaurant
     const val RESTAURANT = "Restaurant"

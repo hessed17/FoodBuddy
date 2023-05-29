@@ -1,4 +1,4 @@
-package com.ajou.foodbuddy.data.firebase.model
+package com.ajou.foodbuddy.data.firebase.model.chat
 
 import com.ajou.foodbuddy.extensions.convertBase64ToStr
 

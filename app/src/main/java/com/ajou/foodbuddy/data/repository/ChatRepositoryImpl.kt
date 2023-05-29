@@ -1,9 +1,9 @@
 package com.ajou.foodbuddy.data.repository
 
 import android.util.Log
-import com.ajou.foodbuddy.data.firebase.model.ChatItem
-import com.ajou.foodbuddy.data.firebase.model.ChatMessageItem
-import com.ajou.foodbuddy.data.firebase.model.ProcessedChatItem
+import com.ajou.foodbuddy.data.firebase.model.chat.ChatItem
+import com.ajou.foodbuddy.data.firebase.model.chat.ChatMessageItem
+import com.ajou.foodbuddy.data.firebase.model.chat.ProcessedChatItem
 import com.ajou.foodbuddy.data.firebase.path.Key.CHATROOM_DETAIL_INFO
 import com.ajou.foodbuddy.data.firebase.path.Key.CHATROOM_INFO
 import com.ajou.foodbuddy.data.firebase.path.Key.CHATROOM_LIST
@@ -12,6 +12,7 @@ import com.ajou.foodbuddy.data.firebase.path.Key.CHATROOM_MESSAGE_INFO
 import com.ajou.foodbuddy.data.firebase.path.Key.CHAT_INFO
 import com.ajou.foodbuddy.data.firebase.path.Key.FCM_SERVER_KEY
 import com.ajou.foodbuddy.data.firebase.path.Key.FCM_TOKEN
+import com.ajou.foodbuddy.data.firebase.path.Key.LAST_UPLOAD_TIME
 import com.ajou.foodbuddy.data.firebase.path.Key.USER_INFO
 import com.ajou.foodbuddy.extensions.convertBase64ToStr
 import com.ajou.foodbuddy.extensions.convertStrToBase64
@@ -23,9 +24,7 @@ import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -68,7 +67,7 @@ class ChatRepositoryImpl @Inject constructor() : ChatRepository {
     }
 
     private fun getChatRoomInfo(chatRoomId: String) {
-        database.child(CHATROOM_INFO).child(chatRoomId)
+        database.child(CHATROOM_INFO).child(chatRoomId).orderByChild(LAST_UPLOAD_TIME)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val chatItem = snapshot.getValue(ChatItem::class.java)

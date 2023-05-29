@@ -22,7 +22,18 @@ data class LoginUserInfo(
     val userFriendsInfo: Any? = null
 )
 
-data class UserInfo(
+data class ChatUserInfo(
     val userId: String,
     val nickname: String
+)
+
+data class UserInfo(
+    val nickname: String,
+    val friendCount: Int = 0
+)
+data class FindFriendInfo(
+    val UserId: String,
+    val nickname: String,
+    val friendCount: Int = 0
+
 )

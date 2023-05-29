@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+//        Firebase.auth.signOut()
+
         if (checkLogin()) {
             initNavigation()
             askNotificationPermission()
@@ -57,6 +59,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkLogin(): Boolean {
+        Log.d("login auth", Firebase.auth.currentUser.toString())
         return Firebase.auth.currentUser != null
     }
 

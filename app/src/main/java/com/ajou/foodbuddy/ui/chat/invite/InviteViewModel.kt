@@ -2,7 +2,7 @@ package com.ajou.foodbuddy.ui.chat.invite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ajou.foodbuddy.data.firebase.model.UserInfo
+import com.ajou.foodbuddy.data.firebase.model.ChatUserInfo
 import com.ajou.foodbuddy.data.repository.ChatRepository
 import com.ajou.foodbuddy.data.repository.UserRepository
 import com.google.firebase.auth.ktx.auth
@@ -28,7 +28,7 @@ class InviteViewModel @Inject constructor(
         }
     }
 
-    fun createNewChatRoom(users: List<UserInfo>): String {
+    fun createNewChatRoom(users: List<ChatUserInfo>): String {
         val chatRoomIdList = users.map { it.userId } + getMyUserId()
         return chatRepository.createNewChatRoom(getMyUserId(), chatRoomIdList,
             users.map { it.nickname }.joinToString(", "))
