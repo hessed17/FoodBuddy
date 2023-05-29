@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.ajou.foodbuddy.MainActivity
 import com.ajou.foodbuddy.R
@@ -19,7 +20,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
 
     var auth: FirebaseAuth = FirebaseAuth.getInstance()
-    var database: DatabaseReference = Firebase.database.reference //실시간 파이어베이스 저장시 사용
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -55,4 +56,5 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
 }

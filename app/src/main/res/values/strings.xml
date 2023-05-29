@@ -9,4 +9,6 @@
 
     <string name="shared_preferences">shared_preferences</string>
     <string name="preference_user_id">preference_user_id</string>
+
+    <string name="default_notification_channel_id">default_notification_channel_id</string>
 </resources>

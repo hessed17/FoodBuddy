@@ -4,12 +4,12 @@ import android.util.Base64
 import java.text.SimpleDateFormat
 
 fun String.convertBase64ToStr(): String {
-    val decodedEmailBytes = Base64.decode(this, Base64.DEFAULT)
+    val decodedEmailBytes = Base64.decode(this, Base64.NO_WRAP)
     return String(decodedEmailBytes)
 }
 
 fun String.convertStrToBase64(): String {
-    return Base64.encodeToString(this.toByteArray(), Base64.DEFAULT)
+    return Base64.encodeToString(this.toByteArray(), Base64.NO_WRAP)
 }
 
 fun String.convertDateFullToTimestamp(): String {

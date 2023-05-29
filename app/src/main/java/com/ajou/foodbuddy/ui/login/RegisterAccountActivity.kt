@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.ajou.foodbuddy.data.firebase.model.UserInfo
+import com.ajou.foodbuddy.data.firebase.model.LoginUserInfo
 import com.ajou.foodbuddy.data.firebase.path.Key
 import com.ajou.foodbuddy.databinding.ActivityRegisterAccountBinding
 import com.ajou.foodbuddy.extensions.convertStrToBase64
@@ -17,8 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class RegisterAccountActivity : AppCompatActivity() {
-
-    private val viewModel: LoginViewModel by viewModels()
 
     private lateinit var binding: ActivityRegisterAccountBinding
 
@@ -66,7 +64,7 @@ class RegisterAccountActivity : AppCompatActivity() {
 
         binding.joinButton.setOnClickListener {
             val userId = binding.idEditTextView.text.toString()
-            val userInfo = UserInfo(
+            val userInfo = LoginUserInfo(
                 nickname = binding.userNickNameEditText.text.toString()
             )
 
@@ -88,7 +86,7 @@ class RegisterAccountActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                             insertAddressToRTDB(userId, userInfo)
-                            saveUserIdToLocal(userId)
+//                            saveUserIdToLocal(userId)
                         } else {
                             Toast.makeText(
                                 baseContext,
@@ -101,12 +99,8 @@ class RegisterAccountActivity : AppCompatActivity() {
         }
     }
 
-    private fun insertAddressToRTDB(userId: String, userInfo: UserInfo) {
+    private fun insertAddressToRTDB(userId: String, userInfo: LoginUserInfo) {
         database.child(Key.USER_INFO).child(userId.convertStrToBase64()).setValue(userInfo)
         finish()
-    }
-
-    private fun saveUserIdToLocal(userId: String) {
-        viewModel.putUserId(userId)
     }
 }

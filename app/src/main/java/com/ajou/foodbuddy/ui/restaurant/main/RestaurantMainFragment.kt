@@ -123,8 +123,7 @@ class RestaurantMainFragment : BaseFragment<FragmentRestaurantMainBinding>(),
                     withContext(Dispatchers.IO) {
                         try {
                             storageRef.child(RESTAURANT).child(item.restaurantName).child("image")
-                                .child("thumbnail").listAll()
-                                .await().items.first().downloadUrl.await().toString().toUri()
+                                .child("thumbnail.jpg").downloadUrl.await().toString().toUri()
                         } catch (_: java.lang.Exception) {
                             Log.d("RestaurantName", item.restaurantName)
                             null
