@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.foodbuddy.data.firebase.model.chat.ProcessedChatItem
 import com.ajou.foodbuddy.databinding.ItemChatRoomBinding
+import com.ajou.foodbuddy.extensions.convertTimeStampToDate
 
 
 class ChatListAdapter(
@@ -18,7 +19,7 @@ class ChatListAdapter(
             binding.apply {
                 chatRoomTitleTextView.text = item.title
                 chatRoomContentTextView.text = item.lastMessageContent
-                chatLastMessageTimeTextView.text = item.lastUploadTime.toString()
+                chatLastMessageTimeTextView.text = item.lastUploadTime.toString().convertTimeStampToDate()
 
                 root.setOnClickListener {
                     chatRoomClickListener(item)

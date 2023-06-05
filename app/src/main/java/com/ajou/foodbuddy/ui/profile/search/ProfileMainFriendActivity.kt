@@ -6,11 +6,11 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.ajou.foodbuddy.data.firebase.model.MyRestaurant
+import com.ajou.foodbuddy.data.firebase.model.restaurant.MyRestaurant
 import com.ajou.foodbuddy.databinding.FragmentProfileMainBinding
-import com.ajou.foodbuddy.extensions.convertBase64ToStr
 import com.ajou.foodbuddy.extensions.convertStrToBase64
 import com.ajou.foodbuddy.ui.restaurant.detail.RestaurantDetailActivity
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -34,6 +34,7 @@ class ProfileMainFriendActivity : AppCompatActivity() {
         val myUserId = Firebase.auth.currentUser!!.email.toString()
         val FriendName = intent.getStringExtra("UserId2").toString()
         //친구 프로필 갱신
+        Log.d("testvvv",FriendName)
         initProfile(FriendName)
 
         //리사이클러뷰 초기화
@@ -62,12 +63,11 @@ class ProfileMainFriendActivity : AppCompatActivity() {
 
         UserInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val MyUser = dataSnapshot.child(userName.convertStrToBase64()) // 해당친구보여주기
+                val MyUser = dataSnapshot.child(userName) // 해당친구보여주기
                 Log.d("userIdaaaa", userName)
                 binding.friendNameTextView.text = MyUser.child("nickname").value.toString()
                 binding.navigateFriendListButton.text = MyUser.child("friendCount").value.toString()
-                //이미지 url or string?
-                //Glide.with(binding.root.context).load("profileImage").into(binding.profileImageButton)
+                Glide.with(binding.root.context).load(MyUser.child("profileImage").value.toString()).into(binding.profileImageButton)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -94,7 +94,7 @@ class ProfileMainFriendActivity : AppCompatActivity() {
         ResInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val MyUserRes =
-                    dataSnapshot.child(userName)
+                    dataSnapshot.child(userName.convertStrToBase64())
                 val totalResCount =
                     MyUserRes.childrenCount.toInt() // RestaurantArray 안에 있는 key:value 개수
                 Log.d("test",totalResCount.toString())
@@ -123,7 +123,7 @@ class ProfileMainFriendActivity : AppCompatActivity() {
             val userFriendInfoRef = FirebaseDatabase.getInstance().reference
                 .child("UserInfo")
                 .child(myName.convertStrToBase64())
-                .child("UserFriendsInfo")
+                .child("userFriendsInfo")
 
             // Query to find the child node with the desired value
             val query = userFriendInfoRef.orderByValue().equalTo(friendName)

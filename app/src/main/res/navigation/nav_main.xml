@@ -32,7 +32,7 @@
 
     <fragment
         android:id="@+id/profile_dest"
-        android:name="com.ajou.foodbuddy.ui.profile.main.ProfileMailFragment"
+        android:name="com.ajou.foodbuddy.ui.profile.main.ProfileMainFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile_main">
 

@@ -3,6 +3,7 @@ package com.ajou.foodbuddy.ui.chat.invite
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -37,17 +38,24 @@ class ChatInviteActivity : AppCompatActivity() {
                 finish()
             }
 
+            showTitleLayoutButton.setOnClickListener {
+                inputTitleLayout.visibility = View.VISIBLE
+            }
+
             completeButton.setOnClickListener {
                 val selectedList = adapter.getSelectedFriendList()
+                val chatRoomTitle = chatRoomTitleEditTextView.text.toString()
                 if (selectedList.isNotEmpty()) {
-                    val chatRoomId = viewModel.createNewChatRoom(selectedList)
+                    val chatRoomId = viewModel.createNewChatRoom(chatRoomTitle, selectedList)
                     startActivity(
                         Intent(
                             this@ChatInviteActivity,
                             ChatDetailActivity::class.java
                         ).apply {
                             putExtra(ChatDetailActivity.CHATROOM_ID, chatRoomId)
+                            putExtra(ChatDetailActivity.CHATROOM_TITLE, chatRoomTitle)
                         })
+                    finish()
                 } else {
                     Toast.makeText(this@ChatInviteActivity, "최소 한 명을 선택해주세요.", Toast.LENGTH_SHORT).show()
                 }

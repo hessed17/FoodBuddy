@@ -1,7 +1,6 @@
-package com.ajou.foodbuddy.data.firebase.model
+package com.ajou.foodbuddy.data.firebase.model.restaurant
 
 import android.net.Uri
-import com.ajou.foodbuddy.data.firebase.path.Key
 
 data class RestaurantItem(
     val categoryId: String? = null,
@@ -18,18 +17,22 @@ data class FirstProcessedRestaurantItem(
     val restaurantName: String,
     val categoryId: String,
 ) {
-    fun convertToSecondProcessedRestaurantItem(thumbnailImage: Uri?) =
+    fun convertToSecondProcessedRestaurantItem(thumbnailImage: Uri?,ratingNumber: Float?,reviewNumber: Int?) =
         SecondProcessedRestaurantItem(
             restaurantName = this.restaurantName,
             categoryId = this.categoryId,
-            thumbnailImage = thumbnailImage
+            thumbnailImage = thumbnailImage,
+            ratingNumber = ratingNumber,
+            reviewNumber = reviewNumber
         )
 }
 
 data class SecondProcessedRestaurantItem(
     val restaurantName: String,
     val categoryId: String,
-    val thumbnailImage: Uri?
+    val thumbnailImage: Uri?,
+    val ratingNumber: Float?=0f,
+    val reviewNumber:Int?=0
 )
 
 data class RestaurantDetailItem(

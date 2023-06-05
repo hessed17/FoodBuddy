@@ -10,5 +10,6 @@
 
     <color name="food_buddy_main_color">#FFE0E0</color>
     <color name="main_button_color">#F8A2A2</color>
+    <color name="recommend_random_button">#F5ED32</color>
     <color name="gray">#939393</color>
 </resources>

@@ -7,6 +7,7 @@ import com.ajou.foodbuddy.data.repository.ChatRepository
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,7 +21,7 @@ class ChatViewModel @Inject constructor(
     val chatRoomList = chatRepository.chatRooms
     val chatMessageList = chatRepository.chatMessages
 
-    fun getUserId() = Firebase.auth.currentUser!!.email.toString()
+    private fun getUserId() = Firebase.auth.currentUser!!.email.toString()
 
     fun getChatRoomList() {
         viewModelScope.launch {
@@ -39,5 +40,4 @@ class ChatViewModel @Inject constructor(
             chatRepository.sendMessage(chatRoomId, getUserId(), messageContent)
         }
     }
-
 }

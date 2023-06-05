@@ -1,7 +1,7 @@
 package com.ajou.foodbuddy.data.repository
 
 import android.util.Log
-import com.ajou.foodbuddy.data.firebase.model.ChatUserInfo
+import com.ajou.foodbuddy.data.firebase.model.profile.ChatUserInfo
 import com.ajou.foodbuddy.data.firebase.path.Key.USER_FRIEND_INFO
 import com.ajou.foodbuddy.data.firebase.path.Key.USER_INFO
 import com.ajou.foodbuddy.extensions.convertBase64ToStr

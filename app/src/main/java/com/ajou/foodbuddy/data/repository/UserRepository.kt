@@ -1,6 +1,6 @@
 package com.ajou.foodbuddy.data.repository
 
-import com.ajou.foodbuddy.data.firebase.model.ChatUserInfo
+import com.ajou.foodbuddy.data.firebase.model.profile.ChatUserInfo
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {

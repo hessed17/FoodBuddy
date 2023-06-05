@@ -6,14 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ajou.foodbuddy.data.firebase.model.FindFriendInfo
-import com.ajou.foodbuddy.data.firebase.model.UserInfo
+import com.ajou.foodbuddy.data.firebase.model.profile.FindFriendInfo
 import com.ajou.foodbuddy.databinding.ItemUserBinding
 import com.ajou.foodbuddy.ui.profile.main.ProfileMainFriendActivity
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.bumptech.glide.Glide
 
 class FriendDeleteAdapter  : ListAdapter<FindFriendInfo, FriendDeleteAdapter.ViewHolder>(diffUtil) {
 
@@ -22,10 +18,11 @@ class FriendDeleteAdapter  : ListAdapter<FindFriendInfo, FriendDeleteAdapter.Vie
 
         fun bind(friendModel: FindFriendInfo) {
             binding.friendDetailTextView.text = friendModel.nickname
+            Glide.with(binding.root.context).load(friendModel.profileImage).into(binding.profileImageView)
             binding.root.setOnClickListener{
 
                 val intent = Intent(binding.root.context, ProfileMainFriendActivity::class.java)
-                intent.putExtra("UserName",friendModel.UserId)
+                intent.putExtra("UserId2",friendModel.UserId)
                 intent.putExtra("delete","delete")
                 binding.root.context.startActivity(intent)
 

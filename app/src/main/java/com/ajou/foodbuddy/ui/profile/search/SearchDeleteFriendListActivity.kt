@@ -1,18 +1,16 @@
 package com.ajou.foodbuddy.ui.profile.search
 
 import android.os.Bundle
-import android.util.ArrayMap
 import android.util.Log
-import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ajou.foodbuddy.data.firebase.model.FindFriendInfo
-import com.ajou.foodbuddy.data.firebase.model.UserInfo
+import com.ajou.foodbuddy.data.firebase.model.profile.FindFriendInfo
 import com.ajou.foodbuddy.databinding.FragmentSearchUserBinding
-import com.ajou.foodbuddy.extensions.convertBase64ToStr
 import com.ajou.foodbuddy.extensions.convertStrToBase64
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -26,26 +24,29 @@ class SearchDeleteFriendListActivity : AppCompatActivity() {
     private val storageRef = Firebase.storage.reference
     private val database = Firebase.database.reference
     private lateinit var adapter: FriendDeleteAdapter
+    private lateinit var listAdapter: ArrayAdapter<String>
+    private val dataList = ArrayList<String>()
+    private var filteredData = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentSearchUserBinding.inflate(layoutInflater)
-        binding.friendSearchEditText.hint = "친구 검색"
+        binding.friendSearchEditText.queryHint = "친구 검색"
         setContentView(binding.root)
 
-        val UserId: String = intent.getStringExtra("UserName").toString()
-
+        val UserId: String = intent.getStringExtra("UserName").toString() //String 계정으로 들어가기
         //리사이클러뷰 초기화
         initFriendAdapter()
-        //initFriendListall(UserId)
+        initFriendListall(UserId)
         //친구검색
-        setupEditText(UserId)
+        setupEditText()
+        setupFriendList()
     }
 
     override fun onRestart() {
         super.onRestart()
         binding = FragmentSearchUserBinding.inflate(layoutInflater)
-        binding.friendSearchEditText.hint = "친구 검색"
+        binding.friendSearchEditText.queryHint = "친구 검색"
         setContentView(binding.root)
 
         val UserId: String = intent.getStringExtra("UserName").toString()
@@ -55,7 +56,7 @@ class SearchDeleteFriendListActivity : AppCompatActivity() {
         Thread.sleep(300)
         initFriendListall(UserId)
         //친구검색
-        setupEditText(UserId)
+        setupEditText()
 
     }
 
@@ -89,6 +90,7 @@ class SearchDeleteFriendListActivity : AppCompatActivity() {
                             myFriendList.add(
                                 FindFriendInfo(
                                     myFriend.key.toString(),
+                                    myFriend.child("profileImage").value.toString(),
                                     myFriend.child("nickname").value.toString(),
                                     myFriend.child("friendCount").getValue(Int::class.java)!!
                                         .toInt()
@@ -117,99 +119,103 @@ class SearchDeleteFriendListActivity : AppCompatActivity() {
         })
     }
 
-    private fun setupEditText(myName: String) {
-        var searchName: String? = null
-        binding.friendSearchEditText.setOnEditorActionListener { _, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
-                searchName = binding.friendSearchEditText.text.toString()
-                friendSearch(myName, searchName!!)
-                true
-            } else {
-                false
+    private fun setupEditText() {
+        listAdapter = binding.root.context.let {
+            ArrayAdapter(
+                it,
+                android.R.layout.simple_list_item_1,
+                filteredData
+            )
+        }!!
+        binding.listView.adapter = listAdapter
+        binding.friendSearchEditText.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                binding.friendSearchEditText.setQuery("", false)
+                binding.listView?.visibility = View.GONE
+                friendSearch(dataList.filter { it.contains(query, ignoreCase = true) }.toString())
+                Log.d("yoosusang5",dataList.filter { it.contains(query, ignoreCase = true) }.toString())
+                return false
             }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                filterData(newText)
+                return true
+            }
+        })
+    }
+    private fun filterData(query: String) {
+        filteredData.clear()
+        if(query!="")
+            filteredData.addAll(dataList.filter { it.contains(query, ignoreCase = true) })
+        listAdapter.notifyDataSetChanged()
+
+        Log.d("yoosusang1",filteredData.toString())
+        if (filteredData.isNotEmpty()) {
+            binding.listView.visibility = View.VISIBLE
+        } else {
+            binding.listView.visibility = View.GONE
         }
     }
 
-    private fun friendSearch(myName: String, searchName: String) {
-        val UserInfos = FirebaseDatabase.getInstance().reference.child("UserInfo")
-        val userFriendsRef =
-            FirebaseDatabase.getInstance().reference.child("UserInfo")
-                .child(myName.convertStrToBase64())
-                .child("userFriendsInfo")
+    private fun friendSearch(searchName: String) {
+        var subSearchName = searchName.substring(1,searchName.length-1)
         var myFriendList = ArrayList<FindFriendInfo>()
-        var deleteMap = ArrayMap<String, Int>()
-        var rdeleteMap = ArrayMap<String, Int>()
-
-        userFriendsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        val userInfos = FirebaseDatabase.getInstance().reference.child("UserInfo")
+        userInfos.addListenerForSingleValueEvent(object:ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                for (child in snapshot.children) {
-                    deleteMap[child.value.toString().convertBase64ToStr()] = 1 // 현재 해당 id값을 넣는다.
-                }
-                UserInfos.addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        for (UserChild in snapshot.children) {
-                            if (UserChild.child("nickname").toString().contains(searchName)) {
-                                if (deleteMap[UserChild.key.toString().convertBase64ToStr()] == 1) {
-                                    rdeleteMap[UserChild.key.toString().convertBase64ToStr()] = 1
-                                }
-                            }
-                        }
+                for(addedFriend in snapshot.children){
+                    if(subSearchName == addedFriend.child("nickname").value.toString()){
+                        myFriendList.add(
+                            FindFriendInfo(
+                                addedFriend.key.toString(),
+                                addedFriend.child("profileImage").value.toString(),
+                                addedFriend.child("nickname").value.toString(),
+                                addedFriend.child("friendCount")
+                                    .getValue(Int::class.java)!!
+                                    .toInt()
+                            )
+                        )
                     }
-
-                    override fun onCancelled(error: DatabaseError) {
-
-                    }
-
-                })
-
-                var totalFriendCount = rdeleteMap.size
-                if (totalFriendCount == 0) {
-                    adapter.clearData()
-                    adapter.notifyDataSetChanged()
-                    binding.notSearchNameText.visibility = View.VISIBLE
-                } else {
-                    binding.notSearchNameText.visibility = View.GONE
-                    val friendSelectedInfoRef =
-                        FirebaseDatabase.getInstance().reference.child("UserInfo")
-                    friendSelectedInfoRef.addListenerForSingleValueEvent(object :
-                        ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            for(myf in snapshot.children){
-                                val myFriend = myf.key.toString().convertBase64ToStr()
-                                if (rdeleteMap[myFriend] == 1) {
-                                    myFriendList.add(
-                                        FindFriendInfo(
-                                            myFriend,
-                                            myf.child("nickname").value.toString(),
-                                            myf.child("friendCount")
-                                                .getValue(Int::class.java)!!
-                                                .toInt()
-                                        )
-                                    )
-
-                                }
-
-                            }
-                            adapter.submitList(myFriendList)
-                            adapter.notifyDataSetChanged()
-
-
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-
-                        }
-                    })
-
                 }
+                adapter.submitList(myFriendList)
+                adapter.notifyDataSetChanged()
+            }
+            override fun onCancelled(error: DatabaseError) {
 
             }
 
+        })
+
+    }
+    private fun setupFriendList(){
+
+        val myBase =Firebase.auth.currentUser!!.email.toString().convertStrToBase64()
+        val friendnInfoRef =
+            FirebaseDatabase.getInstance().reference.child("UserInfo")
+                .child(myBase)
+                .child("userFriendsInfo")
+        friendnInfoRef.addListenerForSingleValueEvent(object:ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                Log.d("yoosusang4",snapshot.toString())
+                for(child in snapshot.children){
+                    FirebaseDatabase.getInstance().reference.child("UserInfo").child(child.value.toString()).
+                        addListenerForSingleValueEvent(object :ValueEventListener{
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                dataList.add(snapshot.child("nickname").value.toString())
+                            }
+                            override fun onCancelled(error: DatabaseError) {
+
+                            }
+
+                        })
+
+                }
+            }
             override fun onCancelled(error: DatabaseError) {
 
             }
         })
-
 
     }
 }

@@ -4,36 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:padding="16dp">
 
 
-    <EditText
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/friendSearchEditText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="13"
-        android:hint=" 친구검색"
-        android:drawableStart="@drawable/baseline_search_24"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:iconifiedByDefault="false"
+        app:queryHint="친구검색"
         android:textColor="@color/black"
-        android:inputType="textEmailAddress"
-        android:textSize="20sp"
+        android:textColorHint="@color/black"
         android:textStyle="bold"
-        android:textColorHint="@color/gray"
+        app:searchIcon="@drawable/baseline_search_24"
+        app:closeIcon="@drawable/baseline_clear_24"
+        app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/queryButton"
-        app:layout_constraintStart_toEndOf="@id/friendSearchEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/friendSearchEditText"
-        app:layout_constraintBottom_toBottomOf="@id/friendSearchEditText"
-        android:src="@drawable/baseline_search_24"
+        app:layout_constraintTop_toTopOf="parent"
+         />
+    <ListView
+        android:id="@+id/listView"
+        app:layout_constraintTop_toBottomOf="@id/friendSearchEditText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@color/white"
-        android:layout_width="40dp"
-        android:layout_height="40dp"/>
+        android:elevation="8dp"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/frientSearchListRecyclerView"

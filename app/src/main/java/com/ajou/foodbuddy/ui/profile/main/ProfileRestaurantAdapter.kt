@@ -2,11 +2,12 @@ package com.ajou.foodbuddy.ui.profile.main
 
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ajou.foodbuddy.data.firebase.model.MyRestaurant
+import com.ajou.foodbuddy.data.firebase.model.restaurant.MyRestaurant
 import com.ajou.foodbuddy.databinding.ItemRestaurantBinding
 import com.ajou.foodbuddy.ui.restaurant.detail.RestaurantDetailActivity
 import com.bumptech.glide.Glide
@@ -26,6 +27,9 @@ class ProfileRestaurantAdapter(
                 .with(binding.root)
                 .load(resModel.thumbnailImage)
                 .into(binding.restaurantImageView)
+            binding.ratingNumberTextView.visibility = View.INVISIBLE
+            binding.line5.visibility = View.INVISIBLE
+            binding.reviewCountTextView.visibility = View.INVISIBLE
 
             binding.root.setOnClickListener {
                 restaurantClickListener(resModel)

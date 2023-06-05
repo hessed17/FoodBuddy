@@ -3,9 +3,8 @@ package com.ajou.foodbuddy.ui.login
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.ajou.foodbuddy.data.firebase.model.LoginUserInfo
+import com.ajou.foodbuddy.data.firebase.model.profile.LoginUserInfo
 import com.ajou.foodbuddy.data.firebase.path.Key
 import com.ajou.foodbuddy.databinding.ActivityRegisterAccountBinding
 import com.ajou.foodbuddy.extensions.convertStrToBase64

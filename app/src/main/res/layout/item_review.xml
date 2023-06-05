@@ -2,98 +2,122 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/reviewContraintLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="12dp"
-    android:background="@drawable/drawable_circle_rect"
     android:padding="12dp">
 
-    <ImageView
-        android:id="@+id/profileImageView"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="16dp"
-        android:background="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/reviewTitleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/profileImageView"
-        app:layout_constraintTop_toTopOf="@id/profileImageView"
-        tools:text="리뷰제목" />
-
-    <TextView
-        android:id="@+id/reviewContentText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@id/profileImageView"
-        app:layout_constraintStart_toStartOf="@id/reviewTitleTextView"
-        tools:text="리뷰작성자" />
-
-    <TextView
-        android:id="@+id/categoryTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        android:textStyle="bold"
+    <ImageButton
+        android:id="@+id/deleteImageButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/shape_circle"
+        android:src="@drawable/baseline_clear_24"
+        android:elevation="10dp"
+        tools:layout_editor_absoluteX="327dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="카테고리" />
+        android:layout_marginRight="15dp"
+        android:visibility="invisible"
+        tools:layout_editor_absoluteY="-1dp" />
 
-    <ImageView
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/heart"
-        app:layout_constraintBottom_toBottomOf="@id/likeNumberTextview"
-        app:layout_constraintEnd_toStartOf="@id/likeNumberTextview" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/reviewContraintLayout"
+        android:layout_width="336dp"
+        android:layout_height="91dp"
+        android:layout_margin="12dp"
+        android:background="@drawable/drawable_circle_rect"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/likeNumberTextview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:textColor="#000000"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/reviewRatingBar"
-        app:layout_constraintEnd_toEndOf="@id/categoryTextView"
-        tools:text="999" />
+        <ImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/reviewNumberText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/profileImageView"
-        app:layout_constraintEnd_toEndOf="@id/likeNumberTextview"
-        tools:text="3.0" />
+        <TextView
+            android:id="@+id/reviewTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/profileImageView"
+            app:layout_constraintTop_toTopOf="@id/profileImageView"
+            tools:text="리뷰제목" />
 
-    <RatingBar
-        android:id="@+id/reviewRatingBar"
-        style="?android:attr/ratingBarStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:numStars="5"
-        android:rating="3"
-        app:layout_constraintBottom_toBottomOf="@id/profileImageView"
-        app:layout_constraintEnd_toStartOf="@+id/reviewNumberText" />
+        <TextView
+            android:id="@+id/reviewContentText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/profileImageView"
+            app:layout_constraintStart_toStartOf="@id/reviewTitleTextView"
+            tools:text="리뷰작성자" />
 
+        <TextView
+            android:id="@+id/categoryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="카테고리" />
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/heart"
+            app:layout_constraintBottom_toBottomOf="@id/likeNumberTextview"
+            app:layout_constraintEnd_toStartOf="@id/likeNumberTextview" />
+
+        <TextView
+            android:id="@+id/likeNumberTextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textColor="#000000"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/reviewRatingBar"
+            app:layout_constraintEnd_toEndOf="@id/categoryTextView"
+            tools:text="999" />
+
+        <TextView
+            android:id="@+id/reviewNumberText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/profileImageView"
+            app:layout_constraintEnd_toEndOf="@id/likeNumberTextview"
+            tools:text="3.0" />
+
+        <RatingBar
+            android:id="@+id/reviewRatingBar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:numStars="5"
+            android:rating="3"
+            app:layout_constraintBottom_toBottomOf="@id/profileImageView"
+            app:layout_constraintEnd_toStartOf="@+id/reviewNumberText" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ajou.foodbuddy.data.firebase.model.SecondProcessedRestaurantItem
+import com.ajou.foodbuddy.data.firebase.model.restaurant.SecondProcessedRestaurantItem
 import com.ajou.foodbuddy.databinding.ItemRestaurantBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -25,6 +25,8 @@ class RestaurantAdapter(
 //                    .skipMemoryCache(true)
                     .into(binding.restaurantImageView)
                 restaurantNameTextView.text = item.restaurantName
+                ratingNumberTextView.text = item.ratingNumber.toString()
+                reviewCountTextView.text = item.reviewNumber.toString()
                 root.setOnClickListener {
                     itemClickListener(item)
                 }

@@ -1,9 +1,11 @@
 package com.ajou.foodbuddy.data.repository
 
 import android.util.Log
+import com.ajou.foodbuddy.data.firebase.model.profile.ChatUserInfo
 import com.ajou.foodbuddy.data.firebase.model.chat.ChatItem
 import com.ajou.foodbuddy.data.firebase.model.chat.ChatMessageItem
 import com.ajou.foodbuddy.data.firebase.model.chat.ProcessedChatItem
+import com.ajou.foodbuddy.data.firebase.path.Key
 import com.ajou.foodbuddy.data.firebase.path.Key.CHATROOM_DETAIL_INFO
 import com.ajou.foodbuddy.data.firebase.path.Key.CHATROOM_INFO
 import com.ajou.foodbuddy.data.firebase.path.Key.CHATROOM_LIST
@@ -12,10 +14,12 @@ import com.ajou.foodbuddy.data.firebase.path.Key.CHATROOM_MESSAGE_INFO
 import com.ajou.foodbuddy.data.firebase.path.Key.CHAT_INFO
 import com.ajou.foodbuddy.data.firebase.path.Key.FCM_SERVER_KEY
 import com.ajou.foodbuddy.data.firebase.path.Key.FCM_TOKEN
-import com.ajou.foodbuddy.data.firebase.path.Key.LAST_UPLOAD_TIME
+import com.ajou.foodbuddy.data.firebase.path.Key.NICKNAME
+import com.ajou.foodbuddy.data.firebase.path.Key.USER_FRIEND_INFO
 import com.ajou.foodbuddy.data.firebase.path.Key.USER_INFO
 import com.ajou.foodbuddy.extensions.convertBase64ToStr
 import com.ajou.foodbuddy.extensions.convertStrToBase64
+import com.ajou.foodbuddy.ui.chat.sharing.chatroom.InviteChatRoomItem
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -46,45 +50,62 @@ class ChatRepositoryImpl @Inject constructor() : ChatRepository {
         get() = _chatRooms.asStateFlow()
 
     override suspend fun getChatRoomList(userId: String) {
-        val dataSnapshot =
-            database.child(CHAT_INFO).child(userId.convertStrToBase64()).child(CHATROOM_LIST)
-                .get().await()
-        val chatRoomIdList = mutableListOf<String>()
-        for (snapshot in dataSnapshot.children) {
-            val chatRoomId = snapshot.getValue(String::class.java)
+        database.child(CHAT_INFO).child(userId.convertStrToBase64()).child(CHATROOM_LIST)
+            .addChildEventListener(object: ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    val chatRoomId = snapshot.getValue(String::class.java)
 
-            if (!chatRoomId.isNullOrBlank()) {
-                chatRoomIdList.add(chatRoomId)
-            }
-        }
+                    if (chatRoomId != null) {
+                        database.child(CHATROOM_INFO).child(chatRoomId).addValueEventListener(object: ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val item = snapshot.getValue(ChatItem::class.java)
 
-        chatRoomIdList.map { chatRoomId ->
-            getChatRoomInfo(chatRoomId)
-        }
+                                if (item?.lastMessageContent != null) {
+                                    val processedItem = item.toProcessedChatItem(chatRoomId)
+                                    var index = -1
+                                    val currentList = _chatRooms.value.toMutableList()
 
-//            _chatRooms.value =
-//                chatList.sortedByDescending { it.lastUploadTime.toString().toLong() }
-    }
+                                    currentList.map {
+                                        if (it.chatRoomId == processedItem.chatRoomId) {
+                                            index = currentList.indexOf(it)
+                                        }
+                                    }
 
-    private fun getChatRoomInfo(chatRoomId: String) {
-        database.child(CHATROOM_INFO).child(chatRoomId).orderByChild(LAST_UPLOAD_TIME)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val chatItem = snapshot.getValue(ChatItem::class.java)
-
-                    if (chatItem?.lastMessageWriter != null) {
-                        chatItem.toProcessedChatItem(chatRoomId)
-                        _chatRooms.value = _chatRooms.value.toMutableList() + chatItem.toProcessedChatItem(chatRoomId)
+                                    if (index == -1) {
+                                        _chatRooms.value = _chatRooms.value.toMutableList() + processedItem
+                                    } else {
+                                        currentList[index] = processedItem
+                                        _chatRooms.value = currentList
+                                    }
+                                }
+                            }
+                            override fun onCancelled(error: DatabaseError) {}
+                        })
                     }
                 }
 
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+                override fun onChildRemoved(snapshot: DataSnapshot) {}
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
                 override fun onCancelled(error: DatabaseError) {}
+
             })
     }
 
     private val _chatMessages = MutableStateFlow<List<ChatMessageItem>>(emptyList())
     override val chatMessages: Flow<List<ChatMessageItem>>
         get() = _chatMessages.asStateFlow()
+
+    suspend fun getChatMemberList(chatRoomId: String): List<ChatUserInfo> {
+        val memberListByUserId = database.child(CHATROOM_DETAIL_INFO).child(chatRoomId).child(CHATROOM_MEMBER)
+            .get().await().value
+
+        Log.d("memberList", memberListByUserId.toString())
+
+        memberListByUserId
+
+        return listOf()
+    }
 
     private lateinit var chatRoomMessageDatabaseRef: DatabaseReference
 
@@ -113,38 +134,61 @@ class ChatRepositoryImpl @Inject constructor() : ChatRepository {
 
     }
 
-    override fun createNewChatRoom(myUserId: String, users: List<String>, chatRoomMemberStr: String): String {
+    override fun createNewChatRoom(
+        myUserId: String,
+        users: List<String>,
+        chatRoomTitle: String
+    ): String {
         val chatRoomId = database.child(CHATROOM_DETAIL_INFO).push().key
         users.forEach { userid ->
             database.child(CHAT_INFO).child(userid.convertStrToBase64()).child(CHATROOM_LIST)
                 .push().setValue(chatRoomId)
         }
-        database.child(USER_INFO).child(myUserId.convertStrToBase64()).child("nickname").addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val nickname = snapshot.value.toString()
-                Log.d("nickname", nickname)
-                val title = mapOf("title" to "$chatRoomMemberStr, $nickname")
-                database.child(CHATROOM_INFO).child(chatRoomId.toString()).updateChildren(title)
-            }
+        database.child(USER_INFO).child(myUserId.convertStrToBase64()).child("nickname")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val nickname = snapshot.value.toString()
+                    Log.d("nickname", nickname)
+                    val title = mapOf("title" to chatRoomTitle)
+                    database.child(CHATROOM_INFO).child(chatRoomId.toString()).updateChildren(title)
+                }
 
-            override fun onCancelled(error: DatabaseError) {}
+                override fun onCancelled(error: DatabaseError) {}
 
-        })
+            })
         database.child(CHATROOM_DETAIL_INFO).child(chatRoomId.toString()).child(CHATROOM_MEMBER)
-            .setValue(users)
+            .setValue(users.map { it.convertStrToBase64()} )
 
         return chatRoomId.toString()
     }
 
-    override suspend fun sendMessage(chatRoomId: String, userId: String, messageContent: String) {
-        withContext(Dispatchers.IO) {
-            updateLastMessage(chatRoomId, userId, messageContent)
+    override suspend fun sendMessage(
+        chatRoomId: String,
+        userId: String,
+        messageContent: String,
+        sharingId: String?,
+        sharingType: String
+    ) {
+        var content = messageContent
+        if (sharingType == Key.SHARING_RESTAURANT) {
+            content = "식당을 공유했습니다."
+        } else if (sharingType == Key.SHARING_REVIEW) {
+            content = "리뷰를 공유했습니다."
         }
         withContext(Dispatchers.IO) {
-            addMessage(chatRoomId, userId, messageContent)
+            updateLastMessage(chatRoomId, userId, content)
         }
         withContext(Dispatchers.IO) {
-            sendNotificationOtherUser(chatRoomId, userId, messageContent)
+            addMessage(
+                chatRoomId = chatRoomId,
+                userId = userId,
+                messageContent = messageContent,
+                sharingType = sharingType,
+                sharingId = sharingId
+            )
+        }
+        withContext(Dispatchers.IO) {
+            sendNotificationOtherUser(chatRoomId, userId, content)
         }
     }
 
@@ -157,11 +201,19 @@ class ChatRepositoryImpl @Inject constructor() : ChatRepository {
         database.child(CHATROOM_INFO).child(chatRoomId).updateChildren(lastMessageUpdate)
     }
 
-    private fun addMessage(chatRoomId: String, userId: String, messageContent: String) {
+    private fun addMessage(
+        chatRoomId: String,
+        userId: String,
+        messageContent: String,
+        sharingType: String,
+        sharingId: String?
+    ) {
         val message = ChatMessageItem(
             writerUserId = userId.convertStrToBase64(),
+            messageType = sharingType,
             messageContent = messageContent,
-            uploadTime = ServerValue.TIMESTAMP
+            uploadTime = ServerValue.TIMESTAMP,
+            sharingId = sharingId
         )
         database.child(CHATROOM_DETAIL_INFO).child(chatRoomId).child(CHATROOM_MESSAGE_INFO).push()
             .setValue(message)
@@ -221,5 +273,60 @@ class ChatRepositoryImpl @Inject constructor() : ChatRepository {
             }
 
         })
+    }
+
+    override suspend fun getStaticChatRoomList(userId: String): List<InviteChatRoomItem> {
+        val dataSnapshot =
+            database.child(CHAT_INFO).child(userId.convertStrToBase64()).child(CHATROOM_LIST)
+                .get().await()
+        val chatRoomIdList = mutableListOf<String>()
+        for (snapshot in dataSnapshot.children) {
+            val chatRoomId = snapshot.getValue(String::class.java)
+
+            if (!chatRoomId.isNullOrBlank()) {
+                chatRoomIdList.add(chatRoomId)
+            }
+        }
+
+        val chatRoomList = mutableListOf<InviteChatRoomItem>()
+
+        for (chatRoomId in chatRoomIdList) {
+            val dataSnapshot2 = database.child(CHATROOM_INFO).child(chatRoomId).get().await()
+            val item = dataSnapshot2.getValue(ChatItem::class.java)
+
+            if (item != null) {
+                chatRoomList.add(item.toInviteChatRoomModel(dataSnapshot2.key.toString()))
+            }
+        }
+
+        return chatRoomList
+    }
+
+    override suspend fun getStaticUserList(userId: String): List<ChatUserInfo> {
+        val dataSnapshot = database.child(USER_INFO).child(userId.convertStrToBase64())
+            .child(USER_FRIEND_INFO).get().await()
+
+        val userIdList = mutableListOf<String>()
+        for (snapshot in dataSnapshot.children) {
+            val userid = snapshot.getValue(String::class.java)
+
+            if (userid != null) {
+                userIdList.add(userid.toString().convertBase64ToStr())
+            }
+        }
+
+        val chatUserInfoList = mutableListOf<ChatUserInfo>()
+        for (userid in userIdList) {
+            val dataSnapshot2 =
+                database.child(USER_INFO).child(userid.convertStrToBase64()).get().await()
+            val decodedUserId = dataSnapshot2.key.toString().convertBase64ToStr()
+            val nickname = dataSnapshot2.child(NICKNAME).getValue(String::class.java)
+
+            if (nickname != null) {
+                chatUserInfoList.add(ChatUserInfo(userId = decodedUserId, nickname = nickname))
+            }
+        }
+
+        return chatUserInfoList
     }
 }

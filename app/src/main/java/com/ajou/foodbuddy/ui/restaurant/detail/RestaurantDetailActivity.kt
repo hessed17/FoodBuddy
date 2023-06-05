@@ -1,5 +1,6 @@
 package com.ajou.foodbuddy.ui.restaurant.detail
 
+import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -12,9 +13,11 @@ import com.ajou.foodbuddy.R
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ajou.foodbuddy.data.firebase.model.ProcessedMenuInfo
-import com.ajou.foodbuddy.data.firebase.model.ProcessedReviewInfo
+import com.ajou.foodbuddy.data.firebase.model.community.AddedProcessReviewInfo
+import com.ajou.foodbuddy.data.firebase.path.Key
 import com.ajou.foodbuddy.databinding.ActivityRestaurantDetailBinding
 import com.ajou.foodbuddy.extensions.convertStrToBase64
+import com.ajou.foodbuddy.ui.chat.sharing.SharingRestaurantToChatRoomActivity
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -31,7 +34,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ListResult
 import com.google.firebase.storage.StorageReference
 
-class RestaurantDetailActivity : AppCompatActivity() {
+class RestaurantDetailActivity : AppCompatActivity(),ReviewAdapter.ReviewDeleteListener {
 
     private lateinit var binding: ActivityRestaurantDetailBinding
     private lateinit var menuadapter: MenuAdapter
@@ -46,6 +49,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
         var restaurantName = intent.getStringExtra(RESTAURANT_NAME).toString()
         val userId = Firebase.auth.currentUser!!.email.toString()
 
+        initMapButton()
 
         initRestaurantName(restaurantName)
         //reviewAdapter 초기화
@@ -63,6 +67,9 @@ class RestaurantDetailActivity : AppCompatActivity() {
         //북마크 버튼 누를 시
         selectBookMark(userId, restaurantName)
 
+        // sharing
+        initSharingButton()
+
         //해당 버튼 클릭시 뷰 변경
         binding.reviewButton.setOnClickListener {
             reviewButtonSelect()
@@ -73,13 +80,23 @@ class RestaurantDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun initMapButton() {
+        binding.restaurantLocationCheckButton.setOnClickListener {
+            startActivity(Intent(this, MapActivity::class.java).apply {
+                putExtra(MapActivity.RESTAURANT_NAME, "아롤도그")
+                putExtra(MapActivity.RESTAURANT_LATITUDE, "37.279006")
+                putExtra(MapActivity.RESTAURANT_LONGITUDE, "127.043537")
+            })
+        }
+    }
+
     private fun initRestaurantName(Name: String) {
-        restaurantName = intent.getStringExtra(Name).toString()
+        restaurantName = Name
     }
 
     //어뎁터 및 리사이클러뷰 설정
     private fun initReviewAdapters() {
-        reviewadapater = ReviewAdapter()
+        reviewadapater = ReviewAdapter(this,this)
         binding.reviewListRecyclerView.adapter = reviewadapater
         binding.reviewListRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -126,9 +143,8 @@ class RestaurantDetailActivity : AppCompatActivity() {
 
                     // Create the menu model and add it to the list
                     val menuModel = ProcessedMenuInfo(
-                        listResult.items[i].name, downloadUrl, "8000"
+                        listResult.items[i].name, downloadUrl,"0"
                     )
-
                     menuList.add(menuModel)
                 }
                 // Submit the menu list to the adapter
@@ -163,7 +179,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
 
     //스피너 적용
     private fun initSpinner(Name: String) {
-        var SpinnerList = ArrayList<ProcessedReviewInfo>()
+        var SpinnerList = ArrayList<AddedProcessReviewInfo>()
         binding.categoriesSpinner.adapter = ArrayAdapter.createFromResource(
             binding.root.context, R.array.spinner_restaurant_review, R.layout.spin_color
         )
@@ -200,7 +216,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
                                             val reviewTitle =
                                                 snapshot.child("reviewTitle").value.toString()
                                             val reviewContent =
-                                                snapshot.child("reviewContent").value.toString()
+                                                snapshot.child("reviewContent").value.toString().substring(0,if(snapshot.child("reviewContent").value.toString().length>8) 8 else snapshot.child("reviewContent").value.toString().length)
                                             val categoryId =
                                                 snapshot.child("categoryId").value.toString()
                                             val restaurantName =
@@ -215,7 +231,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
                                             val uploadTime =
                                                 snapshot.child("uploadTime").value.toString()
                                             if (restaurantName == Name) {
-                                                val processedReviewInfo = ProcessedReviewInfo(
+                                                val processedReviewInfo = AddedProcessReviewInfo(
                                                     reviewId,
                                                     userId,
                                                     reviewTitle,
@@ -305,7 +321,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
                                             val uploadTime =
                                                 snapshot.child("uploadTime").value.toString()
                                             if (restaurantName == Name) {
-                                                val processedReviewInfo = ProcessedReviewInfo(
+                                                val processedReviewInfo = AddedProcessReviewInfo(
                                                     reviewId,
                                                     userId,
                                                     reviewTitle,
@@ -390,7 +406,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
                                             val uploadTime =
                                                 snapshot.child("uploadTime").value.toString()
                                             if (restaurantName == Name) {
-                                                val processedReviewInfo = ProcessedReviewInfo(
+                                                val processedReviewInfo = AddedProcessReviewInfo(
                                                     reviewId,
                                                     userId,
                                                     reviewTitle,
@@ -487,6 +503,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
                                         childSnapshot.ref.removeValue()
                                     }
                                 }
+
                                 override fun onCancelled(error: DatabaseError) {
                                     TODO("Not yet implemented")
                                 }
@@ -514,7 +531,34 @@ class RestaurantDetailActivity : AppCompatActivity() {
 
     }
 
+
+    private fun initSharingButton() {
+        binding.restaurantSharingButton.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    SharingRestaurantToChatRoomActivity::class.java
+                ).apply {
+                    putExtra(Key.SHARING_TYPE, Key.SHARING_RESTAURANT)
+                    putExtra(Key.SHARING_ID,  restaurantName)
+                    putExtra(Key.SHARING_TITLE, restaurantName)
+                }
+            )
+        }
+    }
+
     companion object {
         const val RESTAURANT_NAME = "RESTAURANT_NAME"
+    }
+
+    override fun onReviewDeleted() {
+        initRestaurantName(restaurantName)
+        //reviewAdapter 초기화
+        initReviewAdapters()
+        //menuAdapter 초기화
+        initMenuAdapters()
+        //스피너 적용
+        initSpinner(restaurantName)
+
     }
 }

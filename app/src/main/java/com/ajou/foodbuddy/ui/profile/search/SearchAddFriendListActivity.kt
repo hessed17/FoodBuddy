@@ -3,64 +3,56 @@ package com.ajou.foodbuddy.ui.profile.search
 import android.os.Bundle
 import android.util.ArrayMap
 import android.util.Log
-import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ajou.foodbuddy.data.firebase.model.FindFriendInfo
-import com.ajou.foodbuddy.data.firebase.model.UserInfo
-import com.ajou.foodbuddy.data.firebase.path.Key
+import com.ajou.foodbuddy.data.firebase.model.profile.FindFriendInfo
 import com.ajou.foodbuddy.databinding.FragmentSearchUserBinding
+import com.ajou.foodbuddy.extensions.convertBase64ToStr
 import com.ajou.foodbuddy.extensions.convertStrToBase64
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
 
 class SearchAddFriendListActivity : AppCompatActivity() {
     private lateinit var binding: FragmentSearchUserBinding
-    private val storageRef = Firebase.storage.reference
-    private val database = Firebase.database.reference
     private lateinit var adapter: FriendAddAdapter
+    private lateinit var listAdapter: ArrayAdapter<String>
+    private val dataList = ArrayList<String>()
+    private var filteredData = ArrayList<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentSearchUserBinding.inflate(layoutInflater)
-        binding.friendSearchEditText.hint = "유저 검색"
+        binding.friendSearchEditText.queryHint = "유저 검색"
         setContentView(binding.root)
         val myUserId: String = intent.getStringExtra("UserName").toString()
 
         //리사이클러뷰 초기화
         initFriendAdapter()
-
         //등록된 인원 모두 조회
         //initListAll(UserId)
         //유저 검색
-        //친구검색인데
         setupEditText(myUserId)
-        initQueryButton()
-    }
 
-    private fun initQueryButton() {
-        searchNickname(Firebase.auth.currentUser!!.email.toString())
+        setupFriendList()
+
+        //initQueryButton() -> 필요없다.
     }
 
     override fun onRestart() {
         super.onRestart()
         binding = FragmentSearchUserBinding.inflate(layoutInflater)
-        binding.friendSearchEditText.hint = "유저 검색"
+        binding.friendSearchEditText.queryHint = "유저 검색"
         setContentView(binding.root)
         val UserId: String = intent.getStringExtra("UserName").toString()
 
         //리사이클러뷰 초기화
         initFriendAdapter()
-
         //등록된 인원 조회
         initListAll(UserId)
 
@@ -74,9 +66,10 @@ class SearchAddFriendListActivity : AppCompatActivity() {
         var alljoinList = ArrayList<FindFriendInfo>()
         // 이미 친추된 인원 확인
         var addedFriendList = ArrayMap<String, Int>()
-        var addedFriendAll = FirebaseDatabase.getInstance().reference.child("UserInfo").child(myId.convertStrToBase64())
+        var addedFriendAll = FirebaseDatabase.getInstance().reference.child("UserInfo")
+            .child(myId.convertStrToBase64())
             .child("userFriendsInfo")
-0
+        0
         addedFriendAll.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 //자기자신과 친구인 경우 1로 표시
@@ -84,16 +77,17 @@ class SearchAddFriendListActivity : AppCompatActivity() {
                     addedFriendList[exist.value.toString()] = 1
                 }
                 val a = FirebaseDatabase.getInstance().reference.child("UserInfo")
-                a.addListenerForSingleValueEvent(object:ValueEventListener{
+                a.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         for (exist in snapshot.children) {
-                            if(addedFriendList[exist.key.toString()]==1)
+                            if (addedFriendList[exist.key.toString().convertBase64ToStr()] == 1)
                                 addedFriendList.remove(exist.key.toString())
-                            else{
-                                addedFriendList[exist.key.toString()]=1
+                            else {
+                                addedFriendList[exist.key.toString()] = 1
                             }
                         }
                     }
+
                     override fun onCancelled(error: DatabaseError) {
 
                     }
@@ -109,10 +103,13 @@ class SearchAddFriendListActivity : AppCompatActivity() {
                             if (addOkUser.key.toString() == myId.convertStrToBase64()) {
 
                             } else {
-                                if (addedFriendList[addOkUser.key.toString()] == 1) {
+                                if (addedFriendList[addOkUser.key.toString()
+                                        .convertBase64ToStr()] == 1
+                                ) {
                                     alljoinList.add(
                                         FindFriendInfo(
                                             myFriend.key.toString(),
+                                            myFriend.child("profileImage").value.toString(),
                                             myFriend.child("nickname").value.toString(),
                                             myFriend.child("friendCount")
                                                 .getValue(Int::class.java)!!
@@ -151,136 +148,100 @@ class SearchAddFriendListActivity : AppCompatActivity() {
     }
 
     private fun setupEditText(myUserId: String) {
-        binding.friendSearchEditText.setOnEditorActionListener { _, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
-                searchNickname(myUserId)
-                true
-            } else {
-                false
-            }
-        }
-    }
+        listAdapter = binding.root.context.let {
+            ArrayAdapter(
+                it,
+                android.R.layout.simple_list_item_1,
+                filteredData
+            )
+        }!!
+        binding.listView.adapter = listAdapter
 
-    private fun searchNickname(myUserId: String) {
-        val searchName = binding.friendSearchEditText.text.toString()
-        friendSearch(myUserId, searchName)
-    }
-
-    private fun friendSearch(myUserId: String, searchName: String) {
-        val searchAdmin = FirebaseDatabase.getInstance().reference.child("UserInfo")
-        var findName: String = "null"
-
-        var UserInfoList = FirebaseDatabase.getInstance().reference.child("UserInfo")
-        var myFriendList = ArrayList<FindFriendInfo>()
-        var addedUserList = ArrayMap<String, Int>()
-        var addedFriendAll =
-            FirebaseDatabase.getInstance().reference.child("UserInfo").child(myUserId.convertStrToBase64())
-                .child("userFriendsInfo")
-
-        searchAdmin.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (UserInfos in snapshot.children) {
-                    if (UserInfos.child("nickname").value.toString().contains(searchName)) {
-                        addedUserList[UserInfos.key.toString()] = 1
-                    }
-                }
-                addedFriendAll.addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        //자기자신과 친구인 경우 1로 표시
-                        for (exist in snapshot.children) {
-                            addedUserList.remove(exist.value.toString())
-                        }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-
-                    }
-                })
-                //자기자신과 친구목록이 없는 경우 출력하기
-                UserInfoList.addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        var totalUserCount = addedUserList.size
-                        for (usersCount in snapshot.children) {
-                            if (usersCount.key.toString().contains(findName) && addedUserList[usersCount.key.toString()] != 1)
-                                totalUserCount++
-                        }
-                        addedFriendAll.addListenerForSingleValueEvent(object :
-                            ValueEventListener {
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                if (totalUserCount == 0) {
-                                    adapter.clearData()
-                                    adapter.notifyDataSetChanged()
-                                    binding.notSearchNameText.visibility = View.VISIBLE
-
-                                } else {
-                                    binding.notSearchNameText.visibility = View.GONE
-                                    val friendSelectedInfoRef =
-                                        FirebaseDatabase.getInstance().reference.child("UserInfo")
-                                    friendSelectedInfoRef.addListenerForSingleValueEvent(
-                                        object :
-                                            ValueEventListener {
-                                            override fun onDataChange(snapshot: DataSnapshot) {
-                                                for (addOkUser in snapshot.children) {
-                                                    val myFriend =
-                                                        snapshot.child(addOkUser.key.toString())
-                                                    //자기자신 및 이미 친구추가된 친구 제외
-                                                    if (addOkUser.key.toString() == myUserId.convertStrToBase64()) {
-                                                        Log.d("testest",addOkUser.key.toString())
-
-                                                    } else {
-                                                        if (addedUserList[addOkUser.key.toString()] == 1) {
-                                                            myFriendList.add(
-                                                                FindFriendInfo(
-                                                                    myFriend.key.toString(),
-                                                                    myFriend.child("nickname").value.toString(),
-                                                                    myFriend.child("friendCount")
-                                                                        .getValue(Int::class.java)!!
-                                                                        .toInt()
-                                                                )
-                                                            )
-                                                        }
-                                                    }
-                                                }
-                                                adapter.submitList(myFriendList)
-                                                adapter.notifyDataSetChanged()
-
-                                            }
-
-                                            override fun onCancelled(error: DatabaseError) {
-
-                                            }
-
-
-                                        })
-
-                                }
-                            }
-
-                            override fun onCancelled(error: DatabaseError) {
-
-                            }
-
-                        })
-
-
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-
-                    }
-
-                })
-
-
-
-
+        binding.friendSearchEditText.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                binding.friendSearchEditText.setQuery("", false)
+                binding.listView?.visibility = View.GONE
+                friendSearch(dataList.filter { it.contains(query, ignoreCase = true) }.toString())
+                return true
             }
 
-            override fun onCancelled(error: DatabaseError) {
+            override fun onQueryTextChange(newText: String): Boolean {
+                filterData(newText)
+                return true
             }
-
         })
 
+    }
+
+    private fun filterData(query: String) {
+        filteredData.clear()
+        filteredData.addAll(dataList.filter { it.contains(query, ignoreCase = true) })
+        listAdapter.notifyDataSetChanged()
+        Log.d("yoosusang1", filteredData.toString())
+
+    }
+
+    private fun friendSearch(searchName: String) {
+        var subSearchName = searchName.substring(1,searchName.length-1)
+        var myFriendList = ArrayList<FindFriendInfo>()
+        val userInfo =  FirebaseDatabase.getInstance().reference.child("UserInfo")
+        userInfo.addListenerForSingleValueEvent(object:ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(addFriends in snapshot.children){
+                    if(subSearchName == addFriends.child("nickname").value.toString()){
+                        Log.d("yoosusang3",subSearchName)
+                        myFriendList.add(
+                            FindFriendInfo(
+                                addFriends.key.toString(),
+                                addFriends.child("profileImage").value.toString(),
+                                addFriends.child("nickname").value.toString(),
+                                addFriends.child("friendCount")
+                                    .getValue(Int::class.java)!!
+                                    .toInt()
+                            )
+                        )
+                    }
+                }
+                adapter.submitList(myFriendList)
+                adapter.notifyDataSetChanged()
+            }
+            override fun onCancelled(error: DatabaseError) {
+
+
+            }
+        })
+
+    }
+
+    private fun setupFriendList() {
+        val friendList = ArrayMap<String, Int>()
+        val myBase = Firebase.auth.currentUser!!.email.toString().convertStrToBase64()
+        val userInfo = FirebaseDatabase.getInstance().reference.child("UserInfo")
+        val userFriendInfo = userInfo.child(myBase).child("userFriendsInfo")
+        userFriendInfo.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                friendList[myBase] = 1
+                for (child in snapshot.children) {
+                    friendList[child.value.toString()] = 1 //해당 계정이 base로 저장
+                }
+                userInfo.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (child in snapshot.children) {
+                            if (friendList[child.key.toString()]!=1) { //친구 리스트에 존재하지 않으면 나와 친구가 아니다.
+                                dataList.add(child.child("nickname").value.toString())
+                            }
+                        }
+                        filteredData.addAll(dataList)
+                    }
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
+            }
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
     }
 
 }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:padding="12dp">
 
     <ScrollView
@@ -24,6 +25,8 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/baseline_search_24"
                 android:hint=" 식당명"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -38,6 +41,7 @@
                 android:text="평점"
                 android:textColor="@color/black"
                 android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/searchRestaurantEditTextView"
                 app:layout_constraintTop_toBottomOf="@id/searchRestaurantEditTextView" />
 
@@ -47,12 +51,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:isIndicator="true"
+                android:isIndicator="false"
                 android:numStars="5"
-                android:rating="4"
+                android:progressBackgroundTint="@color/black"
                 app:layout_constraintStart_toEndOf="@id/ratingTextView"
                 app:layout_constraintTop_toTopOf="@id/ratingTextView" />
-
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/restaurantPictureButton"
                 android:layout_width="wrap_content"
@@ -87,6 +90,7 @@
                 android:text="제목"
                 android:textColor="@color/black"
                 android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imageRecyclerView" />
 
@@ -95,7 +99,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:maxLines="1"
+                android:hint="제목작성.."
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/reviewTitleTextView" />
@@ -108,6 +114,7 @@
                 android:text="내용"
                 android:textColor="@color/black"
                 android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/reviewTitleEditText" />
 
@@ -116,13 +123,17 @@
                 android:layout_width="0dp"
                 android:layout_height="300dp"
                 android:layout_marginTop="4dp"
+                android:hint="내용작성.."
+                android:gravity="top|left"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/reviewContentTextView" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/registerButton"
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:background="@color/main_button_color"

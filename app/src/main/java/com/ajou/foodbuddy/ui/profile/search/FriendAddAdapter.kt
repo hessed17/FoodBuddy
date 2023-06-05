@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ajou.foodbuddy.data.firebase.model.FindFriendInfo
-import com.ajou.foodbuddy.data.firebase.model.UserInfo
+import com.ajou.foodbuddy.data.firebase.model.profile.FindFriendInfo
 import com.ajou.foodbuddy.databinding.ItemUserBinding
 import com.ajou.foodbuddy.ui.profile.main.ProfileMainFriendActivity
+import com.bumptech.glide.Glide
 
 class FriendAddAdapter  : ListAdapter<FindFriendInfo, FriendAddAdapter.ViewHolder>(diffUtil) {
 
@@ -18,13 +18,12 @@ class FriendAddAdapter  : ListAdapter<FindFriendInfo, FriendAddAdapter.ViewHolde
         RecyclerView.ViewHolder(binding.root) {
         fun bind(friendModel: FindFriendInfo) {
             binding.friendDetailTextView.text = friendModel.nickname
+            Glide.with(binding.root.context).load(friendModel.profileImage).into(binding.profileImageView)
             binding.root.setOnClickListener{
                 //local에서 부르기 Add intent을 보낸 이유는 button마다 작동하는 방식이 다르기 때문에
                 val intent = Intent(binding.root.context, ProfileMainFriendActivity::class.java)
-                Log.d("userId aaaa", friendModel.UserId)
+                Log.d("userId", friendModel.UserId)
                 intent.putExtra("UserId2",friendModel.UserId)
-
-
                 intent.putExtra("add","add")
                 binding.root.context.startActivity(intent)
             }

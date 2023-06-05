@@ -25,4 +25,34 @@
         app:layout_constraintStart_toStartOf="@id/restaurantImageView"
         app:layout_constraintTop_toBottomOf="@+id/restaurantImageView"
         tools:text="asdsdadsad" />
+    <TextView
+        android:id="@+id/ratingNumberTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4.5"
+        android:textSize="20sp"
+        android:textColor="@color/food_buddy_main_color"
+        android:textStyle="bold"
+        android:layout_marginLeft="42dp"
+        app:layout_constraintTop_toBottomOf="@id/restaurantNameTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+    <TextView
+        android:id="@+id/line5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text=" / "
+        android:textColor="@color/gray"
+        app:layout_constraintStart_toEndOf="@id/ratingNumberTextView"
+        app:layout_constraintTop_toBottomOf="@id/restaurantNameTextView"/>
+    <TextView
+        android:id="@+id/reviewCountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/line5"
+        app:layout_constraintTop_toBottomOf="@id/restaurantNameTextView"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:text="15"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

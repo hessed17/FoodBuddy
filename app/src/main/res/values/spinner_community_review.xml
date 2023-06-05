@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner_community_review">
+        <item>최신순 ▼</item>
+        <item>평점순</item>
+        <item>좋아요순</item>
+        <item>한식</item>
+        <item>일식</item>
+        <item>중식</item>
+        <item>양식</item>
+
+    </string-array>
+
+</resources>

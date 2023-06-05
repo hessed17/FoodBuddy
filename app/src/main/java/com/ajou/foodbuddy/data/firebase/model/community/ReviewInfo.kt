@@ -1,4 +1,4 @@
-package com.ajou.foodbuddy.data.firebase.model
+package com.ajou.foodbuddy.data.firebase.model.community
 
 data class ReviewInfo(
     var userId:String?=null,
@@ -12,7 +12,6 @@ data class ReviewInfo(
 ) {
     fun toProcessedReviewInfo(reviewId: String) =
         ProcessedReviewInfo(
-            reviewId = reviewId,
             userId = userId!!,
             reviewTitle = reviewTitle!!,
             reviewContent = reviewContent!!,
@@ -25,7 +24,6 @@ data class ReviewInfo(
 }
 
 data class ProcessedReviewInfo(
-    var reviewId: String,
     var userId: String,
     var reviewTitle: String,
     var reviewContent: String,
@@ -34,4 +32,18 @@ data class ProcessedReviewInfo(
     var reviewRating: Float,
     var reviewLikeCount: Int,
     var uploadTime: String
+)
+
+
+data class AddedProcessReviewInfo(
+    var reviewid:String,
+    var userId: String,
+    var reviewTitle: String,
+    var reviewContent: String,
+    var categoryId: String,
+    var restaurantName: String,
+    var reviewRating: Float,
+    var reviewLikeCount: Int,
+    var uploadTime: String
+
 )

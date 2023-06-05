@@ -1,6 +1,7 @@
 package com.ajou.foodbuddy.data.firebase.model.chat
 
 import com.ajou.foodbuddy.extensions.convertBase64ToStr
+import com.ajou.foodbuddy.ui.chat.sharing.chatroom.InviteChatRoomItem
 
 data class ChatItem(
     val title: String? = null,
@@ -15,6 +16,13 @@ data class ChatItem(
             lastMessageWriterUserId = this.lastMessageWriter!!.convertBase64ToStr(),
             lastMessageContent = this.lastMessageContent!!,
             lastUploadTime = this.lastUploadTime!!.toString().toLong()
+        )
+
+    fun toInviteChatRoomModel(chatRoomId: String) =
+        InviteChatRoomItem(
+            chatRoomId = chatRoomId,
+            title = this.title,
+            lastMessage = this.lastMessageContent
         )
 }
 

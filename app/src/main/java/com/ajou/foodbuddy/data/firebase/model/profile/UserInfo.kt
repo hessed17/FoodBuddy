@@ -1,4 +1,4 @@
-package com.ajou.foodbuddy.data.firebase.model
+package com.ajou.foodbuddy.data.firebase.model.profile
 
 import android.net.Uri
 
@@ -33,6 +33,7 @@ data class UserInfo(
 )
 data class FindFriendInfo(
     val UserId: String,
+    val profileImage:String?=null,
     val nickname: String,
     val friendCount: Int = 0
 

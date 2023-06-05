@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
     <application
         android:name=".FoodBuddyApplication"
         android:allowBackup="true"
@@ -10,8 +13,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Design.NoActionBar"
+        android:theme="@style/Theme.Design.Light.NoActionBar"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="4tsbetpart" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -40,6 +46,13 @@
         <activity android:name=".ui.profile.main.ProfileMainFriendActivity"/>
         <activity android:name=".ui.profile.search.SearchAddFriendListActivity"/>
         <activity android:name=".ui.profile.search.SearchDeleteFriendListActivity"/>
+        <activity android:name=".ui.chat.sharing.SharingRestaurantToChatRoomActivity"/>
+        <activity android:name=".ui.restaurant.detail.MapActivity"/>
+        <activity android:name=".ui.chat.randomrecommend.RecommendRestaurantActivity"/>
+        <activity android:name=".ui.community.singo.SingoActivity"/>
+        <activity android:name=".ui.community.register.CommunityRegisterNewActivity"/>
+        <activity android:name=".ui.community.notification.CommunityNotificationActivity"/>
+        <activity android:name=".ui.community.detail.CommunityReviewDetailActivity"/>
     </application>
 
 </manifest>

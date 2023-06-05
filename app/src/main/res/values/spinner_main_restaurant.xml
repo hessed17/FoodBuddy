@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner_main_restaurant">
+        <item>선택하기</item>
+        <item>평점순</item>
+        <item>리뷰순</item>
+    </string-array>
+
+</resources>

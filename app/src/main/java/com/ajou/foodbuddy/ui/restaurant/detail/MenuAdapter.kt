@@ -16,8 +16,9 @@ class MenuAdapter : ListAdapter<ProcessedMenuInfo, MenuAdapter.ViewHolder>(diffU
     inner class ViewHolder(private val binding: ItemMenuBinding) :
         RecyclerView.ViewHolder(binding.root) {
             fun bind(menuModel: ProcessedMenuInfo) {
-                binding.menuNameText.text = menuModel.menuName.substring(0,menuModel.menuName.length-4)
-                binding.menuPriceText.text = menuModel.price
+                val priceRegex = Regex("\\d+")
+                binding.menuNameText.text = menuModel.menuName.substringBeforeLast(priceRegex.find(menuModel.menuName)?.value.toString())
+                binding.menuPriceText.text = priceRegex.find(menuModel.menuName)?.value
                 Glide.with(binding.root.context).load(menuModel.imageName).into(binding.menuImageImage)
 
             }

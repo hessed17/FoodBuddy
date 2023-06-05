@@ -6,11 +6,23 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <View
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/foodbuddy"
+        app:layout_constraintBottom_toTopOf="@id/foodBuddyTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+
     <TextView
         android:id="@+id/foodBuddyTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="240dp"
+        android:layout_marginTop="220dp"
         android:text="@string/FoodBuddy"
         android:textColor="#FFD7D7"
         android:textIsSelectable="false"
@@ -58,14 +70,14 @@
         android:id="@+id/loginFalseTextView"
         android:layout_width="247dp"
         android:layout_height="20dp"
+        android:text=" 사용자 아이디와 비밀번호가 일치하지 않습니다."
         android:textColor="#F44336"
         android:textSize="12sp"
-        android:visibility="gone"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginPasswordEditTextView"
-        android:text=" 사용자 아이디와 비밀번호가 일치하지 않습니다." />
+        app:layout_constraintTop_toBottomOf="@id/loginPasswordEditTextView" />
 
     <Button
         android:id="@+id/loginButton"
@@ -78,7 +90,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/loginPasswordEditTextView" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <TextView
         android:id="@+id/userJoinButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

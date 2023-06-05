@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ajou.foodbuddy.data.firebase.model.ChatUserInfo
+import com.ajou.foodbuddy.data.firebase.model.profile.ChatUserInfo
 import com.ajou.foodbuddy.databinding.ItemInviteUserBinding
 
 class FriendListAdapter(): ListAdapter<ChatUserInfo, FriendListAdapter.ViewHolder>(diffUtil) {
@@ -20,13 +20,13 @@ class FriendListAdapter(): ListAdapter<ChatUserInfo, FriendListAdapter.ViewHolde
                 nicknameTextView.text = item.nickname
 
                 root.setOnClickListener {
-                    if (!checkBox.isChecked) {
+                    if (!radioButton.isChecked) {
                         selectedFriends.add(item)
 
                     } else {
                         selectedFriends.remove(item)
                     }
-                    checkBox.isChecked = !checkBox.isChecked
+                    radioButton.isChecked = !radioButton.isChecked
                 }
             }
         }
