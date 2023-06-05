@@ -5,6 +5,7 @@ import com.ajou.foodbuddy.data.firebase.model.profile.ChatUserInfo
 import com.ajou.foodbuddy.data.firebase.model.chat.ChatItem
 import com.ajou.foodbuddy.data.firebase.model.chat.ChatMessageItem
 import com.ajou.foodbuddy.data.firebase.model.chat.ProcessedChatItem
+import com.ajou.foodbuddy.data.firebase.model.profile.UserInfo
 import com.ajou.foodbuddy.data.firebase.path.Key
 import com.ajou.foodbuddy.data.firebase.path.Key.CHATROOM_DETAIL_INFO
 import com.ajou.foodbuddy.data.firebase.path.Key.CHATROOM_INFO
@@ -96,7 +97,9 @@ class ChatRepositoryImpl @Inject constructor() : ChatRepository {
     override val chatMessages: Flow<List<ChatMessageItem>>
         get() = _chatMessages.asStateFlow()
 
-    suspend fun getChatMemberList(chatRoomId: String): List<ChatUserInfo> {
+    private lateinit var chatRoomMessageDatabaseRef: DatabaseReference
+
+    override suspend fun getChatRoomMemberList(chatRoomId: String): List<UserInfo> {
         val memberListByUserId = database.child(CHATROOM_DETAIL_INFO).child(chatRoomId).child(CHATROOM_MEMBER)
             .get().await().value
 
@@ -106,8 +109,6 @@ class ChatRepositoryImpl @Inject constructor() : ChatRepository {
 
         return listOf()
     }
-
-    private lateinit var chatRoomMessageDatabaseRef: DatabaseReference
 
     override suspend fun getChatMessageList(chatRoomId: String) {
         chatRoomMessageDatabaseRef =

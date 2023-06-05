@@ -52,7 +52,7 @@ class SharingChatRoomListFragment : Fragment() {
     }
 
     private fun bindChatRoomList(chatRoomList: List<InviteChatRoomItem>) {
-        chatRoomAdapter.submitList(chatRoomList)
+        chatRoomAdapter.submitList(chatRoomList.sortedByDescending { it.lastUploadTime!!.toLong() })
     }
 
     fun getSelectedChatRoom() =

@@ -1,5 +1,6 @@
 package com.ajou.foodbuddy.data.firebase.model.chat
 
+import android.net.Uri
 import com.ajou.foodbuddy.data.firebase.path.Key
 
 data class ChatMessageItem(
@@ -8,4 +9,10 @@ data class ChatMessageItem(
     val messageContent: String? = null,
     val uploadTime: Any? = null,
     val sharingId: String? = null
+)
+
+data class ChatUserInfo(
+    val profileImage: Uri,
+    val userId: String,
+    val nickname: String
 )

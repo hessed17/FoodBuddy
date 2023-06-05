@@ -36,8 +36,9 @@
         android:background="@color/food_buddy_main_color"
         android:text="안녕하세요 저는 유지훈입니다. 반갑습니다."
         android:textColor="@color/black"
+        android:padding="8dp"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -60,41 +61,51 @@ class RegisterAccountActivity : AppCompatActivity() {
     }
 
     private fun initSignInButton() {
-
         binding.joinButton.setOnClickListener {
             val userId = binding.idEditTextView.text.toString()
-            val userInfo = LoginUserInfo(
-                nickname = binding.userNickNameEditText.text.toString()
-            )
-
-            if (binding.idEditTextView.length() == 0 || binding.passwordEditTextView.length() == 0 || binding.userNickNameEditText.length() == 0
-            ) {
-                Toast.makeText(applicationContext, "빠진 부분이 없는지 확인해주세요.", Toast.LENGTH_LONG).show()
-            } else {
-                //회원가입 파이어베이스로 보내기
-                auth.createUserWithEmailAndPassword(
-                    binding.idEditTextView.text.toString(),
-                    binding.passwordEditTextView.text.toString()
+            val profileImage = FirebaseStorage.getInstance().reference
+            var profileImageString: String? = null
+            profileImage.child("Profile/초기프로필.jpg").downloadUrl.addOnSuccessListener { uri ->
+                // When image load is successful
+//                Glide.with(applicationContext).load(uri).into(binding.restaurantImageView)
+                profileImageString = uri.toString()
+                val userInfo = LoginUserInfo(
+                    profileImageString,
+                    nickname = binding.userNickNameEditText.text.toString()
                 )
-                    .addOnCompleteListener(this) { task ->
-                        if (task.isSuccessful) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Toast.makeText(
-                                applicationContext,
-                                "회원 등록한 계정으로 로그인해주세요.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            insertAddressToRTDB(userId, userInfo)
+                if (binding.idEditTextView.length() == 0 || binding.passwordEditTextView.length() == 0 || binding.userNickNameEditText.length() == 0
+                ) {
+                    Toast.makeText(applicationContext, "빠진 부분이 없는지 확인해주세요.", Toast.LENGTH_LONG).show()
+                } else {
+                    //회원가입 파이어베이스로 보내기
+                    auth.createUserWithEmailAndPassword(
+                        binding.idEditTextView.text.toString(),
+                        binding.passwordEditTextView.text.toString()
+                    )
+                        .addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Toast.makeText(
+                                    applicationContext,
+                                    "회원 등록한 계정으로 로그인해주세요.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                insertAddressToRTDB(userId, userInfo)
 //                            saveUserIdToLocal(userId)
-                        } else {
-                            Toast.makeText(
-                                baseContext,
-                                "Authentication failed.",
-                                Toast.LENGTH_SHORT,
-                            ).show()
+                            } else {
+                                Toast.makeText(
+                                    baseContext,
+                                    "Authentication failed.",
+                                    Toast.LENGTH_SHORT,
+                                ).show()
+                            }
                         }
-                    }
+                }
+
+            }.addOnFailureListener { exception ->
+
             }
+
         }
     }
 

@@ -3,6 +3,7 @@ package com.ajou.foodbuddy.data.repository
 import com.ajou.foodbuddy.data.firebase.model.profile.ChatUserInfo
 import com.ajou.foodbuddy.data.firebase.model.chat.ChatMessageItem
 import com.ajou.foodbuddy.data.firebase.model.chat.ProcessedChatItem
+import com.ajou.foodbuddy.data.firebase.model.profile.UserInfo
 import com.ajou.foodbuddy.data.firebase.path.Key
 import com.ajou.foodbuddy.ui.chat.sharing.chatroom.InviteChatRoomItem
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +17,8 @@ interface ChatRepository {
     val chatMessages: Flow<List<ChatMessageItem>>
 
 //    suspend fun getChatMemberList(chatRoomId: String): List<ChatUserInfo>
+
+    suspend fun getChatRoomMemberList(chatRoomId: String): List<UserInfo>
 
     suspend fun getChatMessageList(chatRoomId: String)
 

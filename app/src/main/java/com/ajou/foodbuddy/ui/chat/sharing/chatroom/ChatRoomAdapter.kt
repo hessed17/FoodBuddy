@@ -68,7 +68,8 @@ class ChatRoomAdapter :
 data class InviteChatRoomItem(
     val chatRoomId: String,
     val title: String? = null,
-    val lastMessage: String? = null
+    val lastMessage: String? = null,
+    val lastUploadTime: String ?= null
 ) {
 //    fun toInviteChatRoomItem(chatRoomId: String) =
 //        InviteChatRoomItem(

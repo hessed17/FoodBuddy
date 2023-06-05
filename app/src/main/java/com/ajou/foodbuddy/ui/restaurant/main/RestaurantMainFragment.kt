@@ -145,11 +145,13 @@ class RestaurantMainFragment : BaseFragment<FragmentRestaurantMainBinding>(),
                     position: Int,
                     id: Long,
                 ) {
+//                    firstProcessedItemList.clear()
                     when (position) {
                         //평점순
                         1->{
                             reviewSelect=0
                             ratingSelect=1
+                            firstProcessedItemList.clear()
                             spinnerBindRestaurantInfo(allNumber,kNumber,jNumber,cNumber,wNumber)
 
                         }
@@ -157,6 +159,7 @@ class RestaurantMainFragment : BaseFragment<FragmentRestaurantMainBinding>(),
                         2->{
                             reviewSelect=1
                             ratingSelect=0
+                            firstProcessedItemList.clear()
                             spinnerBindRestaurantInfo(allNumber,kNumber,jNumber,cNumber,wNumber)
                         }
 
@@ -208,6 +211,7 @@ class RestaurantMainFragment : BaseFragment<FragmentRestaurantMainBinding>(),
 
     }
     private fun bindRestaurantInfo(categoryNumber: String? = null) {
+        firstProcessedItemList.clear()
         val restaurantDB = database.child(RESTAURANT_INFO).limitToFirst(10)
         if (categoryNumber.isNullOrBlank()) {
             allNumber=1
@@ -221,8 +225,18 @@ class RestaurantMainFragment : BaseFragment<FragmentRestaurantMainBinding>(),
         }
     }
 
+    private fun showProgressbar() {
+        _binding?.progressbar?.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressbar() {
+        _binding?.progressbar?.visibility = View.INVISIBLE
+    }
+
     private fun processModelAndSubmitListToAdapter(resName:String?=null) {
+
         launch {
+            showProgressbar()
             Log.d("yoosusang1",dataList.size.toString())
             var totalRatingNumber=0f
             var totalReviewCount=0
@@ -309,6 +323,7 @@ class RestaurantMainFragment : BaseFragment<FragmentRestaurantMainBinding>(),
 
                 }
             }
+            hideProgressbar()
         }
     }
     private fun restaurantEdit() {

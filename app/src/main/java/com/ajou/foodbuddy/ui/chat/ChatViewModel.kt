@@ -31,6 +31,7 @@ class ChatViewModel @Inject constructor(
 
     fun getChatMessageList(chatRoomId: String) {
         viewModelScope.launch {
+            chatRepository
             chatRepository.getChatMessageList(chatRoomId)
         }
     }

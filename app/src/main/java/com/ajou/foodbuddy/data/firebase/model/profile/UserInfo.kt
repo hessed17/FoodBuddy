@@ -17,6 +17,7 @@ import android.net.Uri
 //)
 
 data class LoginUserInfo(
+    val profileImage:String?=null,
     val nickname: String,
     val friendCount: Int = 0,
     val userFriendsInfo: Any? = null

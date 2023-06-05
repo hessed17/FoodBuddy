@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp"
     android:padding="12dp">
 
     <ImageButton
@@ -25,7 +24,6 @@
         android:id="@+id/reviewContraintLayout"
         android:layout_width="336dp"
         android:layout_height="91dp"
-        android:layout_margin="12dp"
         android:background="@drawable/drawable_circle_rect"
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -22,7 +22,8 @@ data class ChatItem(
         InviteChatRoomItem(
             chatRoomId = chatRoomId,
             title = this.title,
-            lastMessage = this.lastMessageContent
+            lastMessage = this.lastMessageContent,
+            lastUploadTime = this.lastUploadTime!!.toString()
         )
 }
 
