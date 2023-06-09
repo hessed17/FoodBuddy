@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import java.text.DecimalFormat
 
 class ReviewAdapter(refreshListener1: Context, private val refreshListener: ReviewDeleteListener) :
     ListAdapter<AddedProcessReviewInfo, ReviewAdapter.ViewHolder>(diffUtil) {
@@ -42,8 +43,8 @@ class ReviewAdapter(refreshListener1: Context, private val refreshListener: Revi
             binding.reviewContentText.text = reviewModel.reviewContent// 내용
             binding.categoryTextView.text = reviewModel.categoryId// 카테고리
             binding.likeNumberTextview.text = reviewModel.reviewLikeCount.toString() // 좋아요 수
-            binding.reviewNumberText.text = reviewModel.reviewRating.toString()// 리뷰평점 수
-            binding.reviewRatingBar.rating = reviewModel.reviewRating //평점 rating
+            binding.reviewNumberText.text = DecimalFormat("#.#").format(reviewModel.reviewRating)// 리뷰평점 수
+            binding.reviewRatingBar.rating = DecimalFormat("#.#").format(reviewModel.reviewRating).toFloat()//평점 rating
             if (reviewModel.userId == Firebase.auth.currentUser!!.email.toString()
             ) {
                 binding.deleteImageButton.visibility = View.VISIBLE

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.foodbuddy.data.firebase.model.community.ImageInfo
 import com.ajou.foodbuddy.databinding.ItemRegisterReviewImageBinding
+import com.bumptech.glide.Glide
 
 class CommunityImageAdapter(private val onDeleteImageClickListener: OnDeleteImageClickListener): ListAdapter<ImageInfo, CommunityImageAdapter.ViewHolder>(diffUtil) {
     interface OnDeleteImageClickListener {
@@ -15,7 +16,7 @@ class CommunityImageAdapter(private val onDeleteImageClickListener: OnDeleteImag
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(communityImageUris: ImageInfo) {
-            binding.previewImageView.setImageURI(communityImageUris.ImageUri)
+            Glide.with(binding.root.context).load(communityImageUris.ImageUri).into(binding.previewImageView)
             binding.deleteImageButton.setOnClickListener {
                 onDeleteImageClickListener.onDeleteImageClick(communityImageUris)
             }

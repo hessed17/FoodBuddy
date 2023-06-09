@@ -7,12 +7,11 @@
     android:background="@color/white"
     android:padding="8dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/shape_circle"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,9 +35,8 @@
         android:background="@color/food_buddy_main_color"
         android:text="안녕하세요 저는 유지훈입니다. 반갑습니다."
         android:textColor="@color/black"
-        android:padding="8dp"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

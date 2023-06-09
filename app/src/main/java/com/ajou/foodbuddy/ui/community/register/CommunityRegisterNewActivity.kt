@@ -16,12 +16,15 @@ import com.ajou.foodbuddy.data.firebase.model.community.ImageInfo
 import com.ajou.foodbuddy.data.firebase.model.community.ProcessedReviewInfo
 import com.ajou.foodbuddy.databinding.FragmentCommunityRegisterNewReviewBinding
 import com.ajou.foodbuddy.extensions.convertTimeStampToDate
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -35,7 +38,7 @@ class CommunityRegisterNewActivity : AppCompatActivity(),
     var content: String? = null
     var addpictureList = ArrayList<ImageInfo>()
     private lateinit var Imageadapter: CommunityImageAdapter
-
+    private val storageRef = Firebase.storage.reference
     private val PICK_IMAGE_REQUEST = 1 // Request code for image picker
     private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 2
 
@@ -72,7 +75,6 @@ class CommunityRegisterNewActivity : AppCompatActivity(),
         Imageadapter.submitList(addpictureList.toList())
         Imageadapter.notifyDataSetChanged()
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -83,14 +85,26 @@ class CommunityRegisterNewActivity : AppCompatActivity(),
             if (imageBitmap != null) {
                 val imageFileName: String? = getImageFileName(imageUri)
                 if (imageFileName != null) {
-                    val fileName = "$imageFileName.jpg"
+                    val fileName = imageFileName.toString()
                     val file = File(applicationContext.filesDir, fileName)
 
                     val outputStream = FileOutputStream(file)
                     imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
                     outputStream.flush()
                     outputStream.close()
-                    addpictureList.add(ImageInfo(Uri.fromFile(file)))
+
+                    val storageRef = FirebaseStorage.getInstance().reference
+                    val reviewRef = storageRef.child("review").child(fileName)
+
+                    val uploadTask = reviewRef.putFile(Uri.fromFile(file))
+                    uploadTask.addOnSuccessListener {
+                        // Image upload successful
+                        // Add the image to the addpictureList
+                    }.addOnFailureListener {
+                        // Handle image upload failure
+                        // Log or display an error message
+                    }
+                    addpictureList.add(ImageInfo(file.toString(),fileName))
                     Imageadapter.submitList(addpictureList)
                     Imageadapter.notifyDataSetChanged()
                 }
@@ -257,7 +271,7 @@ class CommunityRegisterNewActivity : AppCompatActivity(),
                                     ) {
                                         for (list in addpictureList) {
                                             reviewInfo.child(reviews.key.toString()).child("restaurantImage")
-                                                .push().setValue(list.ImageUri.toString())
+                                                .push().setValue(list)
                                         }
                                         break
                                     }

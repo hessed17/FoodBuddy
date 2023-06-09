@@ -33,6 +33,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ListResult
 import com.google.firebase.storage.StorageReference
+import java.text.DecimalFormat
 
 class RestaurantDetailActivity : AppCompatActivity(),ReviewAdapter.ReviewDeleteListener {
 
@@ -214,7 +215,7 @@ class RestaurantDetailActivity : AppCompatActivity(),ReviewAdapter.ReviewDeleteL
                                             val userId =
                                                 snapshot.child("userId").value.toString()
                                             val reviewTitle =
-                                                snapshot.child("reviewTitle").value.toString()
+                                                snapshot.child("reviewTitle").value.toString().substring(0,if(snapshot.child("reviewTitle").value.toString().length>8) 8 else snapshot.child("reviewTitle").value.toString().length)
                                             val reviewContent =
                                                 snapshot.child("reviewContent").value.toString().substring(0,if(snapshot.child("reviewContent").value.toString().length>8) 8 else snapshot.child("reviewContent").value.toString().length)
                                             val categoryId =
@@ -252,8 +253,7 @@ class RestaurantDetailActivity : AppCompatActivity(),ReviewAdapter.ReviewDeleteL
                                                 // Update the review list here
                                                 reviewadapater.submitList(SpinnerList)
                                                 reviewadapater.notifyDataSetChanged()
-                                                binding.restaurantReviewNumberTextView.text =
-                                                    (reviewTotal / SpinnerList.size).toString()
+                                                binding.restaurantReviewNumberTextView.text = DecimalFormat("#.#").format((reviewTotal / SpinnerList.size)).toString()
 
                                             }
 
@@ -304,9 +304,9 @@ class RestaurantDetailActivity : AppCompatActivity(),ReviewAdapter.ReviewDeleteL
                                             val userId =
                                                 snapshot.child("userId").value.toString()
                                             val reviewTitle =
-                                                snapshot.child("reviewTitle").value.toString()
+                                                snapshot.child("reviewTitle").value.toString().substring(0,if(snapshot.child("reviewTitle").value.toString().length>8) 8 else snapshot.child("reviewTitle").value.toString().length)
                                             val reviewContent =
-                                                snapshot.child("reviewContent").value.toString()
+                                                snapshot.child("reviewContent").value.toString().substring(0,if(snapshot.child("reviewContent").value.toString().length>8) 8 else snapshot.child("reviewContent").value.toString().length)
                                             val categoryId =
                                                 snapshot.child("categoryId").value.toString()
                                             val restaurantName =
@@ -389,9 +389,9 @@ class RestaurantDetailActivity : AppCompatActivity(),ReviewAdapter.ReviewDeleteL
                                             val userId =
                                                 snapshot.child("userId").value.toString()
                                             val reviewTitle =
-                                                snapshot.child("reviewTitle").value.toString()
+                                                snapshot.child("reviewTitle").value.toString().substring(0,if(snapshot.child("reviewTitle").value.toString().length>8) 8 else snapshot.child("reviewTitle").value.toString().length)
                                             val reviewContent =
-                                                snapshot.child("reviewContent").value.toString()
+                                                snapshot.child("reviewContent").value.toString().substring(0,if(snapshot.child("reviewContent").value.toString().length>8) 8 else snapshot.child("reviewContent").value.toString().length)
                                             val categoryId =
                                                 snapshot.child("categoryId").value.toString()
                                             val restaurantName =

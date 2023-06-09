@@ -1,18 +1,15 @@
 package com.ajou.foodbuddy.ui.community.detail
 
 import android.content.Context
-import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.foodbuddy.R
-import com.bumptech.glide.Glide
 import com.bumptech.glide.Glide.*
 
-class ViewPagerAdapter(private val context: Context, private val images: ArrayList<Uri>) :
+class ViewPagerAdapter(private val context: Context, private val images: ArrayList<String>) :
     RecyclerView.Adapter<ViewPagerAdapter.ViewPagerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewPagerViewHolder {
@@ -35,7 +32,7 @@ class ViewPagerAdapter(private val context: Context, private val images: ArrayLi
     inner class ViewPagerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imageView: ImageView = itemView.findViewById(R.id.reviewImageView)
 
-        fun bind(imageUri: Uri) {
+        fun bind(imageUri: String) {
             with(context)
                 .load(imageUri)
                 .into(imageView)

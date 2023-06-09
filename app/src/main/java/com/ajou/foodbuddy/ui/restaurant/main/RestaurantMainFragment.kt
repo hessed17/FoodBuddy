@@ -10,7 +10,6 @@ import android.widget.SearchView
 import androidx.core.net.toUri
 import com.ajou.foodbuddy.BaseFragment
 import com.ajou.foodbuddy.R
-import com.ajou.foodbuddy.data.firebase.model.*
 import com.ajou.foodbuddy.data.firebase.model.restaurant.FirstProcessedRestaurantItem
 import com.ajou.foodbuddy.data.firebase.model.restaurant.RestaurantItem
 import com.ajou.foodbuddy.data.firebase.model.restaurant.SecondProcessedRestaurantItem
@@ -27,6 +26,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
+import java.text.DecimalFormat
 
 class RestaurantMainFragment : BaseFragment<FragmentRestaurantMainBinding>(),
     CoroutineScope by MainScope() {
@@ -37,7 +37,7 @@ class RestaurantMainFragment : BaseFragment<FragmentRestaurantMainBinding>(),
     private lateinit var listAdapter: ArrayAdapter<String>
     private val dataList =ArrayList<String>()
     private var filteredData =ArrayList<String>()
-    var allNumber=0
+    var allNumber=1
     var kNumber=0
     var jNumber=0
     var cNumber=0
@@ -145,13 +145,11 @@ class RestaurantMainFragment : BaseFragment<FragmentRestaurantMainBinding>(),
                     position: Int,
                     id: Long,
                 ) {
-//                    firstProcessedItemList.clear()
                     when (position) {
                         //평점순
                         1->{
                             reviewSelect=0
                             ratingSelect=1
-                            firstProcessedItemList.clear()
                             spinnerBindRestaurantInfo(allNumber,kNumber,jNumber,cNumber,wNumber)
 
                         }
@@ -159,7 +157,6 @@ class RestaurantMainFragment : BaseFragment<FragmentRestaurantMainBinding>(),
                         2->{
                             reviewSelect=1
                             ratingSelect=0
-                            firstProcessedItemList.clear()
                             spinnerBindRestaurantInfo(allNumber,kNumber,jNumber,cNumber,wNumber)
                         }
 
@@ -265,7 +262,7 @@ class RestaurantMainFragment : BaseFragment<FragmentRestaurantMainBinding>(),
                             }
                             if(totalReviewCount!=0)
                                 totalRatingNumber/=totalReviewCount
-                            secondProcessedItemList.add(item.convertToSecondProcessedRestaurantItem(thumbnailImageUri,totalRatingNumber,totalReviewCount))
+                            secondProcessedItemList.add(item.convertToSecondProcessedRestaurantItem(thumbnailImageUri,DecimalFormat("#.#").format(totalRatingNumber).toFloat(),totalReviewCount))
                             Log.d("totalRatingNumber", totalRatingNumber.toString())
                             Log.d("totalReviewCount", totalReviewCount.toString())
                             totalRatingNumber=0f
@@ -308,7 +305,7 @@ class RestaurantMainFragment : BaseFragment<FragmentRestaurantMainBinding>(),
                                 if(totalReviewCount!=0)
                                     totalRatingNumber/=totalReviewCount
                                 if(secondProcessedItemList.size==0){
-                                    secondProcessedItemList.add(item.convertToSecondProcessedRestaurantItem(thumbnailImageUri,totalRatingNumber,totalReviewCount))
+                                    secondProcessedItemList.add(item.convertToSecondProcessedRestaurantItem(thumbnailImageUri,DecimalFormat("#.#").format(totalRatingNumber).toFloat(),totalReviewCount))
                                     Log.d("yoosusang",secondProcessedItemList.size.toString())
                                     totalRatingNumber=0f
                                     totalReviewCount=0

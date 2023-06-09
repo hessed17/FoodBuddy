@@ -84,7 +84,7 @@ class ChatDetailActivity: AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.chatMessageList.collect {
-                Log.d("chatMessageList", it.toString())
+                Log.d("aldskfjadskvj", it.toString())
                 adapter.submitList(it)
             }
         }

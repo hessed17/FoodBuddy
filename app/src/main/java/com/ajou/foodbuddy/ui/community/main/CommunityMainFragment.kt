@@ -126,7 +126,7 @@ class CommunityMainFragment : BaseFragment<FragmentCommunityMainBinding>(),Revie
                                             val userId =
                                                 snapshot.child("userId").value.toString()
                                             val reviewTitle =
-                                                snapshot.child("reviewTitle").value.toString()
+                                                snapshot.child("reviewTitle").value.toString().substring(0,if(snapshot.child("reviewTitle").value.toString().length>8) 8 else snapshot.child("reviewTitle").value.toString().length)
                                             val reviewContent =
                                                 snapshot.child("reviewContent").value.toString().substring(0,if(snapshot.child("reviewContent").value.toString().length>8) 8 else snapshot.child("reviewContent").value.toString().length)
                                             val categoryId =
@@ -209,7 +209,7 @@ class CommunityMainFragment : BaseFragment<FragmentCommunityMainBinding>(),Revie
                                             val userId =
                                                 snapshot.child("userId").value.toString()
                                             val reviewTitle =
-                                                snapshot.child("reviewTitle").value.toString()
+                                                snapshot.child("reviewTitle").value.toString().substring(0,if(snapshot.child("reviewTitle").value.toString().length>8) 8 else snapshot.child("reviewTitle").value.toString().length)
                                             val reviewContent =
                                                 snapshot.child("reviewContent").value.toString().substring(0,if(snapshot.child("reviewContent").value.toString().length>8) 8 else snapshot.child("reviewContent").value.toString().length)
                                             val categoryId =
@@ -292,7 +292,7 @@ class CommunityMainFragment : BaseFragment<FragmentCommunityMainBinding>(),Revie
                                             val userId =
                                                 snapshot.child("userId").value.toString()
                                             val reviewTitle =
-                                                snapshot.child("reviewTitle").value.toString()
+                                                snapshot.child("reviewTitle").value.toString().substring(0,if(snapshot.child("reviewTitle").value.toString().length>8) 8 else snapshot.child("reviewTitle").value.toString().length)
                                             val reviewContent =
                                                 snapshot.child("reviewContent").value.toString().substring(0,if(snapshot.child("reviewContent").value.toString().length>8) 8 else snapshot.child("reviewContent").value.toString().length)
                                             val categoryId =

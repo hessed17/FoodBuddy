@@ -1,5 +1,6 @@
 package com.ajou.foodbuddy.ui.chat.invite
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -22,6 +23,7 @@ class FriendListAdapter(): ListAdapter<ChatUserInfo, FriendListAdapter.ViewHolde
                 root.setOnClickListener {
                     if (!radioButton.isChecked) {
                         selectedFriends.add(item)
+                        Log.d("vicjvowiejf", item.toString())
 
                     } else {
                         selectedFriends.remove(item)

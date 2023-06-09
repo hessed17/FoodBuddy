@@ -5,17 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ajou.foodbuddy.data.firebase.model.chat.ProcessedChatItem
+import com.ajou.foodbuddy.data.firebase.model.chat.ProcessedChatRoomItem
 import com.ajou.foodbuddy.databinding.ItemChatRoomBinding
 import com.ajou.foodbuddy.extensions.convertTimeStampToDate
 
 
 class ChatListAdapter(
-    private val chatRoomClickListener: (ProcessedChatItem) -> Unit
-): ListAdapter<ProcessedChatItem, ChatListAdapter.ViewHolder>(diffUtil) {
+    private val chatRoomClickListener: (ProcessedChatRoomItem) -> Unit
+): ListAdapter<ProcessedChatRoomItem, ChatListAdapter.ViewHolder>(diffUtil) {
 
     inner class ViewHolder(private val binding: ItemChatRoomBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ProcessedChatItem) {
+        fun bind(item: ProcessedChatRoomItem) {
             binding.apply {
                 chatRoomTitleTextView.text = item.title
                 chatRoomContentTextView.text = item.lastMessageContent
@@ -36,12 +36,12 @@ class ChatListAdapter(
     }
 
     companion object {
-        val diffUtil = object: ItemCallback<ProcessedChatItem>() {
-            override fun areItemsTheSame(oldItem: ProcessedChatItem, newItem: ProcessedChatItem): Boolean {
+        val diffUtil = object: ItemCallback<ProcessedChatRoomItem>() {
+            override fun areItemsTheSame(oldItem: ProcessedChatRoomItem, newItem: ProcessedChatRoomItem): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: ProcessedChatItem, newItem: ProcessedChatItem): Boolean {
+            override fun areContentsTheSame(oldItem: ProcessedChatRoomItem, newItem: ProcessedChatRoomItem): Boolean {
                 return oldItem.chatRoomId == newItem.chatRoomId
             }
 

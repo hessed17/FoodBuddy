@@ -6,28 +6,36 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
+import androidx.core.view.marginTop
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ajou.foodbuddy.data.firebase.model.chat.ChatMessageItem
+import com.ajou.foodbuddy.data.firebase.model.chat.ProcessedChatMessageItem
 import com.ajou.foodbuddy.data.firebase.path.Key
 import com.ajou.foodbuddy.databinding.ItemChatroomDetailMyMessageBinding
 import com.ajou.foodbuddy.databinding.ItemChatroomDetailMySharingBinding
 import com.ajou.foodbuddy.databinding.ItemChatroomDetailOpponentMessageBinding
 import com.ajou.foodbuddy.databinding.ItemChatroomDetailOpponentSharingBinding
 import com.ajou.foodbuddy.extensions.convertBase64ToStr
+import com.ajou.foodbuddy.extensions.convertStrToBase64
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class ChatMessageAdapter(
-    private val sharingItemClickListener: (ChatMessageItem) -> Unit
+    private val sharingItemClickListener: (ProcessedChatMessageItem) -> Unit,
 ) :
-    ListAdapter<ChatMessageItem, RecyclerView.ViewHolder>(diffUtil) {
+    ListAdapter<ProcessedChatMessageItem, RecyclerView.ViewHolder>(diffUtil) {
 
     inner class MyViewHolder(private val binding: ItemChatroomDetailMyMessageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: ChatMessageItem) {
+        fun bind(item: ProcessedChatMessageItem) {
             binding.messageTextView.text = item.messageContent.toString()
         }
     }
@@ -35,7 +43,7 @@ class ChatMessageAdapter(
     inner class MySharingViewHolder(private val binding: ItemChatroomDetailMySharingBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: ChatMessageItem) {
+        fun bind(item: ProcessedChatMessageItem) {
             binding.sharingTitleTextView.text = item.messageContent
 
             binding.navigateSharingLayout.setOnClickListener {
@@ -47,42 +55,62 @@ class ChatMessageAdapter(
     inner class OpponentViewHolder(private val binding: ItemChatroomDetailOpponentMessageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: ChatMessageItem) {
+        fun bind(item: ProcessedChatMessageItem) {
             val index = currentList.indexOf(item)
 
             if (index == 0) {
                 binding.profileImageView.visibility = View.VISIBLE
                 binding.nicknameTextView.visibility = View.VISIBLE
+                Glide
+                    .with(binding.root)
+                    .load(item.profileImageUrl)
+                    .into(binding.profileImageView)
             } else {
                 val beforeItem = currentList[index - 1]
-                if (beforeItem.writerUserId == item.writerUserId) {
+                if (beforeItem.nickname == item.nickname) {
                     binding.profileImageView.visibility = View.GONE
                     binding.nicknameTextView.visibility = View.GONE
                 } else {
+                    Glide
+                        .with(binding.root)
+                        .load(item.profileImageUrl)
+                        .into(binding.profileImageView)
+
                     binding.profileImageView.visibility = View.VISIBLE
                     binding.nicknameTextView.visibility = View.VISIBLE
                 }
             }
 
-            binding.nicknameTextView.text = item.writerUserId.toString()
-            binding.messageTextView.text = item.messageContent.toString()
+            binding.nicknameTextView.text = item.nickname
+            binding.messageTextView.text = item.messageContent
         }
     }
 
     inner class OpponentSharingViewHolder(private val binding: ItemChatroomDetailOpponentSharingBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-            fun bind(item: ChatMessageItem) {
+            fun bind(item: ProcessedChatMessageItem) {
                 val index = currentList.indexOf(item)
 
                 if (index == 0) {
                     binding.profileImageView.visibility = View.VISIBLE
+                    Glide
+                        .with(binding.root)
+                        .load(item.profileImageUrl)
+                        .into(binding.profileImageView)
                 } else {
                     val beforeItem = currentList[index - 1]
-                    if (beforeItem.writerUserId == item.writerUserId) {
+                    if (beforeItem.nickname == item.nickname) {
                         binding.profileImageView.visibility = View.GONE
+                        binding.nicknameTextView.visibility = View.GONE
                     } else {
+                        Glide
+                            .with(binding.root)
+                            .load(item.profileImageUrl)
+                            .into(binding.profileImageView)
                         binding.profileImageView.visibility = View.VISIBLE
+                        binding.nicknameTextView.visibility = View.VISIBLE
+                        binding.nicknameTextView.text = item.nickname
                     }
                 }
 
@@ -96,7 +124,8 @@ class ChatMessageAdapter(
 
     override fun getItemViewType(position: Int): Int {
         val item = currentList[position]
-        return if (item.writerUserId == Firebase.auth.currentUser!!.email.toString()) {
+
+        return if (item.userId == Firebase.auth.currentUser!!.email.toString()) {
             if (item.messageType == Key.SHARING_NORMAL) {
                 MY
             } else {
@@ -157,18 +186,18 @@ class ChatMessageAdapter(
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<ChatMessageItem>() {
+        val diffUtil = object : DiffUtil.ItemCallback<ProcessedChatMessageItem>() {
             override fun areItemsTheSame(
-                oldItem: ChatMessageItem,
-                newItem: ChatMessageItem
+                oldItem: ProcessedChatMessageItem,
+                newItem: ProcessedChatMessageItem
             ): Boolean {
                 return oldItem == newItem
             }
 
             @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(
-                oldItem: ChatMessageItem,
-                newItem: ChatMessageItem
+                oldItem: ProcessedChatMessageItem,
+                newItem: ProcessedChatMessageItem
             ): Boolean {
                 return oldItem.uploadTime == newItem.uploadTime
             }

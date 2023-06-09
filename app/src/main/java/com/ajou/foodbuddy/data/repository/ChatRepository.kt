@@ -1,24 +1,19 @@
 package com.ajou.foodbuddy.data.repository
 
 import com.ajou.foodbuddy.data.firebase.model.profile.ChatUserInfo
-import com.ajou.foodbuddy.data.firebase.model.chat.ChatMessageItem
-import com.ajou.foodbuddy.data.firebase.model.chat.ProcessedChatItem
-import com.ajou.foodbuddy.data.firebase.model.profile.UserInfo
+import com.ajou.foodbuddy.data.firebase.model.chat.ProcessedChatRoomItem
+import com.ajou.foodbuddy.data.firebase.model.chat.ProcessedChatMessageItem
 import com.ajou.foodbuddy.data.firebase.path.Key
 import com.ajou.foodbuddy.ui.chat.sharing.chatroom.InviteChatRoomItem
 import kotlinx.coroutines.flow.Flow
 
 interface ChatRepository {
 
-    val chatRooms: Flow<List<ProcessedChatItem>>
+    val chatRooms: Flow<List<ProcessedChatRoomItem>>
 
     suspend fun getChatRoomList(userId: String)
 
-    val chatMessages: Flow<List<ChatMessageItem>>
-
-//    suspend fun getChatMemberList(chatRoomId: String): List<ChatUserInfo>
-
-    suspend fun getChatRoomMemberList(chatRoomId: String): List<UserInfo>
+    val chatMessages: Flow<List<ProcessedChatMessageItem>>
 
     suspend fun getChatMessageList(chatRoomId: String)
 
@@ -32,8 +27,8 @@ interface ChatRepository {
         sharingType: String = Key.SHARING_NORMAL
     )
 
-    suspend fun getStaticChatRoomList(userId: String): List<InviteChatRoomItem>
+    suspend fun getSharableChatRoomList(userId: String): List<InviteChatRoomItem>
 
-    suspend fun getStaticUserList(userId: String): List<ChatUserInfo>
+    suspend fun getSharableUserList(userId: String): List<ChatUserInfo>
 
 }

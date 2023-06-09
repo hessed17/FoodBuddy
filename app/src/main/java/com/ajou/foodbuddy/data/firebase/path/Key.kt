@@ -33,6 +33,8 @@ object Key {
     const val SHARING_TITLE = "SHARING_TITLE"
     const val SHARING_ID = "SHARING_ID"
 
+    const val MENU_INFO = "MenuInfo"
+
     // FCM ServerKey
     const val FCM_SERVER_KEY = "AAAA1YIGpjs:APA91bHGInBDT9LDnRrTuUkuAvIvgKo0F3XD8yvlocmJCd0phWcnrqVy85YeTjvWbecyeorYTkkN4WIi0w2dhCriGiwCuqFK9jm2_mqqUvw0waT0dXmC13K65Y4zAjMO0P6d1RWV_ZeU"
 }

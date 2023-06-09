@@ -10,7 +10,7 @@ data class ChatItem(
     val lastUploadTime: Any? = null,
 ) {
     fun toProcessedChatItem(chatRoomId: String) =
-        ProcessedChatItem(
+        ProcessedChatRoomItem(
             chatRoomId = chatRoomId,
             title = this.title!!,
             lastMessageWriterUserId = this.lastMessageWriter!!.convertBase64ToStr(),
@@ -27,7 +27,7 @@ data class ChatItem(
         )
 }
 
-data class ProcessedChatItem(
+data class ProcessedChatRoomItem(
     val chatRoomId: String,
     val title: String,
     val lastMessageWriterUserId: String,

@@ -1,7 +1,6 @@
 package com.ajou.foodbuddy.ui.community.detail
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -25,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 
 class CommunityReviewDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCommunityReviewDetailBinding
@@ -191,7 +191,9 @@ class CommunityReviewDetailActivity : AppCompatActivity() {
                                                                         snapshot.child("profileImage").value.toString(),
                                                                         findkeys.child("reviewTitle").value.toString(),
                                                                         "좋아요",
-                                                                        System.currentTimeMillis().toString().convertTimeStampToDate()
+                                                                        System.currentTimeMillis()
+                                                                            .toString()
+                                                                            .convertTimeStampToDate()
                                                                     )
                                                                 )
                                                         }
@@ -280,18 +282,31 @@ class CommunityReviewDetailActivity : AppCompatActivity() {
     }
 
     private fun initImageAdd(reviewId: String) {
+        val imageList = ArrayList<String>()
         val reviewInfoInner =
             FirebaseDatabase.getInstance().reference.child("ReviewInfo").child(reviewId)
         val restaurantImages = reviewInfoInner.child("restaurantImage")
         restaurantImages.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val imageList = arrayListOf<Uri>().apply {
-                    for (Uris in snapshot.children) {
-                        add(Uri.parse(Uris.value.toString()))
+                val cnt = snapshot.childrenCount
+                for (child in snapshot.children) {
+                    val filename = child.child("fileName").value.toString()
+                    val storageRef = FirebaseStorage.getInstance().reference
+                    val reviewRef = storageRef.child("review").child(filename)
+                    val downloadUrlTask = reviewRef.downloadUrl
+                    downloadUrlTask.addOnSuccessListener { uri ->
+                        imageList.add(uri.toString())
+                        if(imageList.size==cnt.toInt()){
+                            val adapter = ViewPagerAdapter(binding.root.context, imageList)
+                            binding.reviewImageViewPager2.adapter = adapter
+                        }
+                    }.addOnFailureListener { exception ->
+                        // Handle download URL retrieval failure
+                        // Log or display an error message
                     }
                 }
-                var adapter = ViewPagerAdapter(binding.root.context, imageList)
-                binding.reviewImageViewPager2.adapter = adapter
+
+                Log.d("yoosusang16", imageList.size.toString())
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -388,7 +403,8 @@ class CommunityReviewDetailActivity : AppCompatActivity() {
                                                     snapshot.child("profileImage").value.toString(),
                                                     findkeys.child("reviewTitle").value.toString(),
                                                     "댓글",
-                                                    System.currentTimeMillis().toString().convertTimeStampToDate()
+                                                    System.currentTimeMillis().toString()
+                                                        .convertTimeStampToDate()
                                                 )
                                             )
                                         //해당 리뷰를 작성한 사람에게 알림을 날린다. 리뷰작성자 == 현재 계정시 날린다.
@@ -449,10 +465,10 @@ class CommunityReviewDetailActivity : AppCompatActivity() {
 
     }
 
-    private fun clickSingoButton(reviewId:String){
+    private fun clickSingoButton(reviewId: String) {
         binding.singoButton.setOnClickListener {
             val intent = Intent(this, SingoActivity::class.java)
-            intent.putExtra("reviewId",reviewId)
+            intent.putExtra("reviewId", reviewId)
             startActivity(intent)
         }
     }
